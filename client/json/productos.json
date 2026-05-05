@@ -1,0 +1,14 @@
+[
+    { "id": 1, "nombre": "Teclado Mecánico RGB", "precio": 8500, "categoria": "Perifericos", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/5337/5337826.png" },
+    { "id": 2, "nombre": "Mouse Gamer Pro", "precio": 4200, "categoria": "Perifericos", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/8346/8346508.png" },
+    { "id": 3, "nombre": "Memoria RAM 16GB", "precio": 12500, "categoria": "Hardware", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/3786/3786576.png" },
+    { "id": 4, "nombre": "Disco SSD 1TB NVMe", "precio": 15000, "categoria": "Hardware", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/7418/7418487.png" },
+    { "id": 5, "nombre": "Monitor 24' Full HD", "precio": 45000, "categoria": "Perifericos", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/2933/2933296.png" },
+    { "id": 6, "nombre": "Placa de Video RTX", "precio": 350000, "categoria": "Hardware", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/8404/8404082.png" },
+    { "id": 7, "nombre": "Auriculares 7.1", "precio": 9800, "categoria": "Perifericos", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/5432/5432663.png" },
+    { "id": 8, "nombre": "Fuente 750W Bronze", "precio": 18000, "categoria": "Hardware", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/7036/7036621.png" },
+    { "id": 9, "nombre": "Gabinete Gamer ATX", "precio": 14000, "categoria": "Hardware", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/5863/5863774.png" },
+    { "id": 10, "nombre": "Webcam Full HD", "precio": 7500, "categoria": "Perifericos", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/4827/4827895.png" },
+    { "id": 11, "nombre": "Procesador i7", "precio": 210000, "categoria": "Hardware", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/4149/4149678.png" },
+    { "id": 12, "nombre": "Pad Mouse XXL", "precio": 3500, "categoria": "Perifericos", "activo": true, "imagen": "https://cdn-icons-png.flaticon.com/128/11153/11153132.png" }
+]

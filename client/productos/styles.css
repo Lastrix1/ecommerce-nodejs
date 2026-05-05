@@ -1,0 +1,140 @@
+/* 1. Estilos Globales */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: white;
+    border-bottom: 3px solid #007bff; 
+    flex-wrap: wrap;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #007bff;
+}
+
+.logo p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.header-controles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.barra-navegacion a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+.barra-navegacion a:hover {
+    color: #007bff;
+}
+
+.botones-config {
+    display: flex;
+    gap: 8px;                
+}
+
+.botones-config button {
+    padding: 4px 10px;       
+    cursor: pointer;         
+    background-color: #eee;  
+    border: 1px solid #ccc;  
+    border-radius: 4px;      
+    font-size: 0.8rem;
+}
+
+
+/* --- 3. BARRA DE FILTROS --- */
+.barra-filtros {
+    display: flex;
+    flex-wrap: wrap;         
+    justify-content: center; 
+    gap: 10px;
+    padding: 15px;
+    background-color: #e9ecef; 
+}
+
+/* --- 4. GRID DE PRODUCTOS (TARJETAS) --- */
+.grid-productos {
+    display: grid;           
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;           
+    padding: 20px;
+    justify-content: center; 
+}
+
+.tarjeta {
+    background: white;       
+    padding: 20px;           
+    border-radius: 12px;     
+    display: flex;
+    flex-direction: column;  
+    align-items: center;     
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    transition: transform 0.3s ease; 
+}
+
+.tarjeta:hover {
+    transform: translateY(-5px); 
+}
+
+.tarjeta img {
+    width: 100px;          
+    height: 100px;
+    object-fit: contain;     
+    margin-bottom: 15px;
+}
+
+/* --- 5. RESPONSIVE (CELULARES) --- */
+@media (max-width: 600px) {
+    header {
+        flex-direction: column; 
+        text-align: center;
+    }
+
+    .header-controles {
+        align-items: center;    
+        margin-top: 15px;
+    }
+
+    .grid-productos {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+        gap: 15px;
+    }
+}
+
+/* MODO OSCURO SIMPLE */
+body.oscuro {
+    background-color: #727070;
+    color: white;
+}
+body.oscuro header, body.oscuro .tarjeta {
+    background-color: #7a7777;
+    border-color: #444;
+}
+
+.oculto { display: none; }
+
+/*
+Flexbox (display: flex): Lo usamos para el Header porque queremos alinear cosas en una dirección (horizontal o vertical). Es unidimensional.
+
+CSS Grid (display: grid): Lo usamos para la Galería de Productos porque permite manejar filas y columnas al mismo tiempo. Es ideal para catálogos.
+
+auto-fit y minmax: Esta es la "magia" de la responsividad. Le dice al navegador: "Pon tantas tarjetas como quepan, pero que ninguna mida menos de 220px". Si no caben, el navegador las baja automáticamente sin necesidad de muchas Media Queries.
+
+box-sizing: border-box: Es fundamental. Asegura que si le pones un padding a un elemento, este no se ensanche más allá del 100%, evitando el scroll horizontal.
+
+transition y transform: Son propiedades de diseño que mejoran la experiencia del usuario (UX), haciendo que la página se sienta interactiva y moderna.
+*/

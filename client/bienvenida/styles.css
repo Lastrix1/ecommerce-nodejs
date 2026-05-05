@@ -1,0 +1,76 @@
+/* 1. Estilos Globales */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: white;
+    border-bottom: 3px solid #007bff; 
+    flex-wrap: wrap;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #007bff;
+}
+
+.logo p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.header-controles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.barra-navegacion a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+.barra-navegacion a:hover {
+    color: #007bff;
+}
+
+.botones-config {
+    display: flex;
+    gap: 8px;                
+}
+
+.botones-config button {
+    padding: 4px 10px;       
+    cursor: pointer;         
+    background-color: #eee;  
+    border: 1px solid #ccc;  
+    border-radius: 4px;      
+    font-size: 0.8rem;
+}
+
+/* 3. Sección de Bienvenida */
+main {
+    flex: 1; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    padding: 20px;
+}
+
+/* MODO OSCURO SIMPLE */
+body.oscuro {
+    background-color: #727070;
+    color: white;
+}
+body.oscuro header, body.oscuro .tarjeta {
+    background-color: #7a7777;
+    border-color: #444;
+}
+
+.oculto { display: none; }

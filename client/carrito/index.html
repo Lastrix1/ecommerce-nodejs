@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto Tecno S.A | Tu Carrito</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../assets/img/favicon.png" alt="Logo Punto Tecno" class="logo-carrito">
+            <h1>PUNTO TECNO S.A</h1>
+            <p>Alumno: Pertot Mabel </p>
+        </div>
+        <div class="header-controles">
+            <nav class="barra-navegacion">
+                <a href="../bienvenida/">Bienvenida</a>
+                <a href="../productos/index.html">Productos</a>
+                <a href="../carrito/">Carrito</a>
+                <a href="../ticket/">Ticket</a>
+            </nav> 
+
+            <div class="botones-config">
+                <button id="btn-tema">Cambiar Tema</button>
+                <button id="btn-admin">Admin Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="caja-bienvenida" style="text-align: center;">
+        <h1>TU CARRITO</h1>
+        <p>Revisa los productos que has agregado antes de finalizar tu compra.</p>
+ 
+        
+        <!-- Contenedor para los productos -->
+        <div id="lista-productos">
+        
+        </div>
+
+        <div class="botones-container">
+            <button onclick="window.location.href='../productos/index.html'">Seguir Comprando</button>
+            <button id="btn-confirmar" class="btn-azul">Confirmar Pedido</button>
+            <button onclick="salir()">Salir</button>
+        </div>
+    </main><br>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

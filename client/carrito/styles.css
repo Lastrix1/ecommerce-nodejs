@@ -1,0 +1,86 @@
+/* 1. Estilos Globales */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+/* --- 2. EL CONTENEDOR ÚNICO (CENTRA TODO) --- */
+main {
+    max-width: 600px; 
+    margin: 40px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* --- 4. BOTONES Y PRECIO  --- */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: white;
+    border-bottom: 3px solid #007bff; 
+    flex-wrap: wrap;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #007bff;
+}
+
+.logo p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.header-controles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.barra-navegacion a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+.barra-navegacion a:hover {
+    color: #007bff;
+}
+
+.botones-config {
+    display: flex;
+    gap: 8px;                
+}
+
+.botones-config button {
+    padding: 4px 10px;       
+    cursor: pointer;         
+    background-color: #eee;  
+    border: 1px solid #ccc;  
+    border-radius: 4px;      
+    font-size: 0.8rem;
+}
+
+/* MODO OSCURO SIMPLE */
+body.oscuro {
+    background-color: #222;
+    color: white;
+}
+body.oscuro header, body.oscuro .tarjeta, body.oscuro main {
+    background-color: #333;
+    border-color: #444;
+}
+
+.oculto { display: none; }

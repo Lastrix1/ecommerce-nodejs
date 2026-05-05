@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PUNTO TECNO S.A | Productos</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+</head>
+<body>
+    <header>
+    <div class="logo">
+        <img src="../assets/img/favicon.png" alt="Logo" class="logo-carrito">
+        <div class="logo-texto">
+            <h1>PUNTO TECNO S.A</h1>
+            <p>Alumno: Pertot Mabel</p>
+        </div>
+    </div>
+
+    <!-- Este contenedor agrupa todo lo de la derecha -->
+    <div class="header-controles">
+        <nav class="barra-navegacion">
+            <a href="../bienvenida/">Bienvenida</a>
+            <a href="../productos/index.html">Productos</a>
+            <a href="../carrito/">Carrito</a>
+            <a href="../ticket/">Ticket</a>
+        </nav>
+
+        <div class="botones-config">
+            <button id="btn-tema">Cambiar Tema</button>
+            <button id="btn-admin" class="btn-destacado">Admin Login</button>
+        </div>
+    </div>
+</header>
+    <main>
+        <div class="barra-filtros">
+            <button onclick="renderizarTienda('Todos')">Ver Todo</button>
+            <button onclick="renderizarTienda('Perifericos')">Periféricos</button>
+            <button onclick="renderizarTienda('Hardware')">Hardware</button>
+             <button id="btn-ver-carrito" onclick="verCarrito()">Ver Carrito (0)</button>
+        </div>
+
+        <div id="lista-productos" class="grid-productos"></div>
+
+        <div id="vista-resumen-pedido" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2000; overflow-y: auto; padding: 20px;">
+            <div style="max-width: 800px; margin: 0 auto; font-family: sans-serif;">
+                <button onclick="cerrarResumen()" style="background: #6e7881; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">← Volver al Catálogo</button>
+        
+                <h2 style="text-align: center; margin-top: 20px;">Resumen de tu Pedido</h2>
+                <hr>
+        
+            <div id="lista-resumen-productos">
+            <!-- Aquí se renderizan los productos dinámicamente -->
+            </div>
+
+            <div style="margin-top: 30px; text-align: right; border-top: 2px solid #eee; padding-top: 20px;">
+                <h3 id="total-resumen" style="font-size: 1.5rem;">Total: $0</h3>
+                <button onclick="confirmarYViajar()" style="background: #7066e0; color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 10px;">Finalizar y Generar Ticket</button>
+            </div>
+        </div>
+    </div>
+    </main><br>
+
+
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PUNTO TECNO S.A | Ticket</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Librerías Externas -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="../assets/img/favicon.png" alt="Logo Punto Tecno" class="logo-ticket">
+            <h1>PUNTO TECNO S.A</h1>
+            <p>Alumno: Pertot Mabel</p>
+        </div>
+        <div class="header-controles">
+            <nav class="barra-navegacion">
+                <a href="../bienvenida/">Bienvenida</a>
+                <a href="../productos/index.html">Productos</a>
+                <a href="../carrito/">Tienda</a>
+                <a href="../ticket/">Ticket</a>
+            </nav> 
+
+            <div class="botones-config">
+                <button id="btn-tema">Cambiar Tema</button>
+                <button id="btn-admin">Admin Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="ticket-container">
+        <div class="card-ticket">
+            <div class="icon-success">
+                <svg viewBox="0 0 24 24" width="80" height="80">
+                    <circle cx="12" cy="12" r="11" fill="none" stroke="#a5dc86" stroke-width="2"/>
+                    <path d="M7 12l3 3 7-7" fill="none" stroke="#a5dc86" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <h1>¡Gracias por elegirnos!</h1>
+            <p>Tu compra en <strong>PUNTO TECNO S.A</strong> ha sido exitosa.</p>
+
+            <div id="detalle-ticket" class="ticket-preview">
+            <!-- Se llenará dinámicamente con JS -->
+            </div>
+
+            <div class="ticket-actions">
+                <button id="btn-descargar" class="btn-pdf">Descargar Ticket PDF</button>
+                <button onclick="window.salir()" class="btn-salir">Salir y Finalizar</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
