@@ -1,71 +1,103 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUNTO TECNO S.A | Catálogo de Productos</title>
 
-    <title>PUNTO TECNO S.A | Productos</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
-    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
 </head>
 <body>
+
     <header>
-    <div class="logo">
-        <img src="../assets/img/favicon.png" alt="Logo" class="logo-carrito">
-        <div class="logo-texto">
-            <h1>PUNTO TECNO S.A</h1>
-            <p>Alumno: Pertot Mabel</p>
-        </div>
-    </div>
+        <!-- NAVBAR RESPONSIVA -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                    <img src="../assets/img/favicon.png" alt="Logo" width="30" height="30" class="me-2">
+                    PUNTO TECNO S.A
+                </a>
 
-    <!-- Este contenedor agrupa todo lo de la derecha -->
-    <div class="header-controles">
-        <nav class="barra-navegacion">
-            <a href="../bienvenida/">Bienvenida</a>
-            <a href="../productos/index.html">Productos</a>
-            <a href="../carrito/">Carrito</a>
-            <a href="../ticket/">Ticket</a>
+                <!-- BOTÓN HAMBURGUESA -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navOffcanvas" aria-controls="navOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- MENÚ OFFCANVAS (Derecha a Izquierda) -->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="navOffcanvas">
+                    <div class="offcanvas-header border-bottom">
+                        <h5 class="offcanvas-title">Menú Principal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 mb-3 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irABienvenida()">Bienvenida</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irAProductos()">Tienda</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irACarrito()">Carrito</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irATicket()">Ticket</a></li>
+                        </ul>
+
+                        <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                            <!-- Botón Sol/Luna -->
+                            <button id="btn-tema" class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i id="icono-tema" class="bi bi-sun-fill"></i>
+                            </button>
+                            <button id="btn-admin" class="btn btn-sm btn-outline-secondary">Admin Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </nav>
+    </header>
 
-        <div class="botones-config">
-            <button id="btn-tema">Cambiar Tema</button>
-            <button id="btn-admin" class="btn-destacado">Admin Login</button>
-        </div>
-    </div>
-</header>
-    <main>
-        <div class="barra-filtros">
-            <button onclick="renderizarTienda('Todos')">Ver Todo</button>
-            <button onclick="renderizarTienda('Perifericos')">Periféricos</button>
-            <button onclick="renderizarTienda('Hardware')">Hardware</button>
-             <button id="btn-ver-carrito" onclick="verCarrito()">Ver Carrito (0)</button>
-        </div>
-
-        <div id="lista-productos" class="grid-productos"></div>
-
-        <div id="vista-resumen-pedido" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2000; overflow-y: auto; padding: 20px;">
-            <div style="max-width: 800px; margin: 0 auto; font-family: sans-serif;">
-                <button onclick="cerrarResumen()" style="background: #6e7881; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">← Volver al Catálogo</button>
-        
-                <h2 style="text-align: center; margin-top: 20px;">Resumen de tu Pedido</h2>
-                <hr>
-        
-            <div id="lista-resumen-productos">
-            <!-- Aquí se renderizan los productos dinámicamente -->
+    <main class="container">
+        <!-- BARRA DE FILTROS -->
+        <section class="barra-filtros shadow-sm">
+            <div class="d-flex flex-wrap gap-2 justify-content-center align-items-center">
+                <button class="btn btn-primary px-4" onclick="renderizarTienda('Todos')">Ver Todo</button>
+                <button class="btn btn-outline-primary px-4" onclick="renderizarTienda('Perifericos')">Periféricos</button>
+                <button class="btn btn-outline-primary px-4" onclick="renderizarTienda('Hardware')">Hardware</button>
+                
+                <button id="btn-ver-carrito" class="btn btn-success ms-lg-auto" onclick="verCarrito()">
+                    <i class="bi bi-cart4 me-2"></i>Ver Carrito (0)
+                </button>
             </div>
+        </section>
 
-            <div style="margin-top: 30px; text-align: right; border-top: 2px solid #eee; padding-top: 20px;">
-                <h3 id="total-resumen" style="font-size: 1.5rem;">Total: $0</h3>
-                <button onclick="confirmarYViajar()" style="background: #7066e0; color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 10px;">Finalizar y Generar Ticket</button>
+        <!-- GRID DE PRODUCTOS (LAS 12 TARJETAS) -->
+        <div id="lista-productos" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+            
+            <!-- Carousel -->
+            <div class="col">
+                <div class="card h-100 tarjeta-producto shadow-sm">
+                    <div id="carousel1" class="carousel slide" data-bs-ride="false">
+                        <div class="carousel-inner p-3">
+                            <div class="carousel-item active"></div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel1" data-bs-slide="prev">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel1" data-bs-slide="next">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    </main><br>
+    </main>
 
-
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
 </body>
-
 </html>

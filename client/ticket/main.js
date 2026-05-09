@@ -1,196 +1,283 @@
-// 1. Variables Globales 
+// 1. Recuperación de datos y Variables Globales
 const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
 const cliente = localStorage.getItem('cliente') || "Consumidor Final";
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Aplicar tema guardado
-    if (localStorage.getItem('tema') === 'dark') {
-        document.body.classList.add('oscuro');
-    }
+const htmlElement = document.documentElement;
+const btnTema = document.getElementById('btn-tema');
+const iconoTema = document.getElementById('icono-tema');
 
-    // Dibujar resumen en pantalla
+document.addEventListener('DOMContentLoaded', () => {
+    const temaGuardado = localStorage.getItem('tema') || 'light';
+    aplicarTema(temaGuardado);
+
+    // Renderizar los datos del ticket
     mostrarResumenEnPantalla();
 
-    // --- CONFIGURACIÓN DE BOTONES ---
-
-    // 1. Botón Descargar (PDF)
-    const btnDescargar = document.getElementById('btn-descargar');
-    if (btnDescargar) {
-        btnDescargar.onclick = mostrarModalConfirmacion;
-    }
-
-    // 2. Botón Salir
-    const btnSalirPantalla = document.querySelector('.btn-exit'); 
-    if (btnSalirPantalla) {
-        btnSalirPantalla.onclick = salirDelSistema;
-    }
-
-    // 3. Botón Cambio de Tema
-    const btnTema = document.getElementById('btn-tema');
+    // Evento para cambiar el tema
     if (btnTema) {
         btnTema.onclick = () => {
-            document.body.classList.toggle('oscuro');
-            localStorage.setItem('tema', document.body.classList.contains('oscuro') ? 'dark' : 'light');
+            const nuevoTema = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            aplicarTema(nuevoTema);
         };
     }
 
-    // 4. Botón Admin Login (Agregado)
-    const btnAdmin = document.getElementById('btn-admin');
-    if (btnAdmin) {
-        btnAdmin.onclick = () => {
-            const esOscuro = document.body.classList.contains('oscuro');
-            Swal.fire({
-                title: 'Módulo en Análisis',
-                text: 'El panel administrativo está en fase de auditoría técnica.',
-                icon: 'info',
-                background: esOscuro ? '#333' : '#fff',
-                color: esOscuro ? '#fff' : '#000',
-                confirmButtonColor: '#007bff',
-                confirmButtonText: 'Cerrar',
-            });
-        };
+    // Configurar botón de descarga
+    const btnDescargar = document.getElementById('btn-descargar');
+    if (btnDescargar) {
+        btnDescargar.onclick = generarPDF;
     }
 });
+
+// --- FUNCIONES DE INTERFAZ ---
+
+function aplicarTema(tema) {
+    htmlElement.setAttribute('data-bs-theme', tema);
+    localStorage.setItem('tema', tema);
+    
+    // Cambiar iconos y estilos del botón según el tema
+    if (tema === 'dark') {
+        if (iconoTema) iconoTema.className = 'bi bi-moon-fill';
+        btnTema?.classList.replace('btn-outline-warning', 'btn-outline-info');
+    } else {
+        if (iconoTema) iconoTema.className = 'bi bi-sun-fill';
+        btnTema?.classList.replace('btn-outline-info', 'btn-outline-warning');
+    }
+}
 
 function mostrarResumenEnPantalla() {
     const contenedor = document.getElementById('detalle-ticket');
     if (!contenedor) return;
 
-    // Recuperar datos del usuario y fecha
-    const nombreUsuario = localStorage.getItem('cliente') || "Usuario Desconocido";
-    const fechaActual = new Date().toLocaleDateString();
-
     if (carrito.length === 0) {
-        contenedor.innerHTML = "<p>No hay productos en el carrito.</p>";
+        contenedor.innerHTML = `<div class="text-center py-3">
+                                    <i class="bi bi-exclamación-triangle text-warning fs-1"></i>
+                                    <p class="mt-2">No hay productos registrados en esta compra.</p>
+                                </div>`;
         return;
     }
 
+    const fechaActual = new Date().toLocaleDateString('es-AR', {
+        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+
     let total = 0;
     let html = `
-        <div class="ticket-header">
-            <h3>Comprobante de Venta</h3>
-            <p><strong>Cliente:</strong> ${nombreUsuario}</p>
-            <p><strong>Fecha:</strong> ${fechaActual}</p>
+        <div class="border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+            <h5 class="fw-bold text-uppercase mb-1">Comprobante No Válido como Factura</h5>
+            <p class="mb-0 small"><strong>Cliente:</strong> ${cliente}</p>
+            <p class="mb-0 small"><strong>Fecha:</strong> ${fechaActual}</p>
         </div>
-        <ul style="list-style: none; padding: 0;">`;
+        <div class="mb-3">`;
 
     carrito.forEach(p => {
         const subtotal = p.precio * p.cantidad;
         total += subtotal;
         html += `
-            <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed #ccc; padding: 10px 0;">
-                <span>${p.nombre} (x${p.cantidad})</span>
-                <span>$${subtotal}</span>
-            </li>`;
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-truncate me-2">${p.nombre} (x${p.cantidad})</span>
+                <span class="fw-semibold text-nowrap">$${subtotal.toLocaleString()}</span>
+            </div>`;
     });
 
-    html += `</ul><div style="text-align: right; font-weight: bold; margin-top: 15px; font-size: 1.3rem;">
-                Total: $${total}
-             </div>`;
+    html += `</div>
+        <div class="border-top border-dark border-opacity-50 pt-3 d-flex justify-content-between align-items-center">
+            <span class="h5 mb-0 fw-bold">TOTAL PAGADO</span>
+            <span class="h3 mb-0 fw-bold text-primary">$${total.toLocaleString()}</span>
+        </div>`;
 
     contenedor.innerHTML = html;
 }
 
-async function mostrarModalConfirmacion() {
-    const result = await Swal.fire({
-        title: '¡Compra Exitosa!',
-        text: `Gracias ${cliente} por elegirnos.`,
-        icon: 'success',
-        imageUrl: '../assets/img/favicon.png', 
-        imageWidth: 80,
-        imageHeight: 80,
-        showCancelButton: true,
-        confirmButtonText: 'Descargar Ticket PDF',
-        cancelButtonText: 'Finalizar y Salir',
-        confirmButtonColor: '#757579',
-        cancelButtonColor: 'rgb(81, 79, 79)',
-        allowOutsideClick: false 
-    });
-
-    if (result.isConfirmed) {
-        await generarPDF();
-        mostrarModalConfirmacion(); 
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-        salirDelSistema();
-    }
-}
-
+// --- GENERACIÓN DE DOCUMENTOS ---
 
 async function generarPDF() {
-    if (carrito.length === 0) return;
-
     try {
-        const { PDFDocument, StandardFonts } = PDFLib;
+        const { PDFDocument, StandardFonts, rgb } = PDFLib;
         const pdfDoc = await PDFDocument.create();
-        const page = pdfDoc.addPage([300, 500]);
-        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const page = pdfDoc.addPage([400, 600]);
+        const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+        const fontNormal = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-        // --- 1. LÓGICA PARA EL LOGO ---
-    let yPosition = 450;
-        try {
-            const urlLogo = '../assets/img/favicon.png'; 
-            const imageBytes = await fetch(urlLogo).then((res) => res.arrayBuffer());
-            const logoImagen = await pdfDoc.embedPng(imageBytes);
+        let y = 560;
 
-
-            page.drawImage(logoImagen, {
-                x: 15,
-                y: yPosition - 10,
-                width: 30,
-                height: 30,
-            });
-
-        } catch (error){
-            page.drawText("PUNTO TECNO S.A.", { 
-                x: 50, 
-                y: yPosition, 
-                size: 16, 
-                font
-            });
-            console.warn("No se pudo cargar el logo en el PDF.", error);
-        }
-
-        const fecha = new Date().toLocaleDateString();
-        const totalFinal = carrito.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
-
-        let y = 450;
-        page.drawText("PUNTO TECNO S.A.", { x: 50, y: y, size: 16, font });
-        y -= 30;
-        page.drawText(`Cliente: ${cliente}`, { x: 50, y: y, size: 11, font });
-        y -= 15;
-        page.drawText(`Fecha: ${fecha}`, { x: 50, y: y, size: 10, font });
+        // Encabezado del PDF
+        page.drawText("PUNTO TECNO S.A.", { x: 50, y, size: 22, font: fontBold, color: rgb(0.05, 0.4, 0.9) });
         y -= 40;
+        page.drawText(`CLIENTE: ${cliente.toUpperCase()}`, { x: 50, y, size: 10, font: fontNormal });
+        y -= 15;
+        page.drawText(`FECHA: ${new Date().toLocaleString()}`, { x: 50, y, size: 10, font: fontNormal });
+        y -= 25;
+        page.drawLine({ start: { x: 50, y }, end: { x: 350, y }, thickness: 1, opacity: 0.5 });
+        y -= 30;
 
+        // Listado de productos
         carrito.forEach(p => {
-            page.drawText(`${p.cantidad}x ${p.nombre} - $${p.precio * p.cantidad}`, { x: 50, y, size: 10, font });
-            y -= 15; 
+            page.drawText(`${p.cantidad}x ${p.nombre.substring(0, 30)}`, { x: 50, y, size: 10, font: fontNormal });
+            page.drawText(`$${(p.precio * p.cantidad).toLocaleString()}`, { x: 300, y, size: 10, font: fontNormal });
+            y -= 20;
         });
 
-        page.drawText(`TOTAL FINAL: $${totalFinal}`, { x: 50, y: y - 20, size: 14, font });
+        y -= 20;
+        page.drawLine({ start: { x: 50, y }, end: { x: 350, y }, thickness: 1.5 });
+        y -= 30;
 
+        // Total final
+        const totalFinal = carrito.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
+        page.drawText("TOTAL:", { x: 50, y, size: 16, font: fontBold });
+        page.drawText(`$${totalFinal.toLocaleString()}`, { x: 270, y, size: 16, font: fontBold });
+
+        // Guardar y descargar
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `Ticket_${cliente.replace(/\s+/g, '_')}.pdf`;
+        link.download = `Ticket_PuntoTecno_${Date.now()}.pdf`;
         link.click();
+
+        // Esperar un instante para asegurar descarga
+        setTimeout(() => {
+
+            Swal.fire({
+                title: '¡Compra finalizada!',
+                text: 'Tu ticket fue descargado correctamente. Redirigiendo a Inicio...',
+                icon: 'success',
+                timer: 3500,
+                showConfirmButton: false,
+                confirmButtonText: 'Volver al inicio',
+                confirmButtonColor: '#0d6efd',
+                allowOutsideClick: false
+            }).then(() => {
+
+            // Limpiar carrito
+            localStorage.removeItem('carritoActual');
+
+            // Redireccionar
+            window.location.href =
+                "../bienvenida/index.html";
+        });
+
+    }, 1000);
+
     } catch (error) {
-        console.error("Error al generar PDF:", error);
+        console.error("Error PDF:", error);
+        Swal.fire('Error', 'No se pudo generar el archivo PDF.', 'error');
     }
 }
 
 function salirDelSistema() {
+    // Limpiar carrito al finalizar con éxito
     localStorage.removeItem('carritoActual');
-    localStorage.removeItem('cliente'); 
     
     Swal.fire({
-        title: 'Finalizando...',
-        text: '¡Hasta la próxima!',
-        icon: 'info',
+        title: '¡Vuelve pronto!',
+        text: 'Redirigiendo a la página de bienvenida...',
+        icon: 'success',
         timer: 2000,
         showConfirmButton: false
     }).then(() => {
         window.location.href = "../bienvenida/index.html";
     });
 }
+
+// --- NAVEGACIÓN CONTROLADA ---
+
+window.irAProductos = function () {
+
+    const usuario = localStorage.getItem('cliente');
+
+    if (!usuario) {
+
+        Swal.fire({
+            title: 'Acceso restringido',
+            text: 'Debes ingresar tu nombre para continuar.',
+            icon: 'warning',
+            confirmButtonColor: '#0d6efd',
+
+            timer: 5000,
+        });
+
+        return;
+    }
+
+    Swal.fire({
+        title: 'Ingresar a Tienda',
+        text: `Bienvenido ${usuario}, ¿deseas continuar?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ingresar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0d6efd'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            window.location.href =
+                "../productos/index.html";
+        }
+    });
+};
+
+window.irACarrito = function () {
+
+    const usuario = localStorage.getItem('cliente');
+    const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
+
+    if (!usuario) {
+        Swal.fire({
+            title: 'Debes iniciar sesión',
+            text: 'Ingresa tu nombre primero.',
+            icon: 'warning',
+            confirmButtonColor: '#0d6efd',
+
+            timer: 5000,
+        });
+        return;
+    }
+
+    if (carrito.length === 0) {
+        Swal.fire({
+            title: 'Carrito vacío',
+            text: 'Debes agregar productos antes de ingresar.',
+            icon: 'info',
+            confirmButtonColor: '#0d6efd',
+
+            timer: 5000,
+        });
+        return;
+    }
+
+    window.location.href = "../carrito/index.html";
+};
+
+window.irATicket = function () {
+
+    const usuario = localStorage.getItem('cliente');
+    const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
+
+    if (!usuario) {
+        Swal.fire({
+            title: 'Acceso denegado',
+            text: 'Primero debes iniciar sesión.',
+            icon: 'warning',
+            confirmButtonColor: '#0d6efd',
+
+            timer: 5000,
+        });
+        return;
+    }
+
+    if (carrito.length === 0) {
+        Swal.fire({
+            title: 'Sin compra registrada',
+            text: 'Debes confirmar tu pedido primero.',
+            icon: 'info',
+            confirmButtonColor: '#0d6efd',
+
+            timer: 5000,
+        });
+        return;
+    }
+
+    window.location.href = "../carrito/index.html";
+};
 

@@ -1,4 +1,4 @@
-/* 1. Estilos Globales */
+/* 1. Estilos Globales 
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
@@ -6,7 +6,7 @@ body {
     color: #333;
 }
 
-/* --- 2. EL CONTENEDOR ÚNICO (CENTRA TODO) --- */
+/* --- 2. EL CONTENEDOR ÚNICO (CENTRA TODO) --- 
 main {
     max-width: 600px; 
     margin: 40px auto;
@@ -16,7 +16,7 @@ main {
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
 }
 
-/* --- 4. BOTONES Y PRECIO  --- */
+/* --- 4. BOTONES Y PRECIO  --- 
 
 header {
     display: flex;
@@ -73,7 +73,7 @@ header {
     font-size: 0.8rem;
 }
 
-/* MODO OSCURO SIMPLE */
+/* MODO OSCURO SIMPLE 
 body.oscuro {
     background-color: #222;
     color: white;
@@ -83,4 +83,9 @@ body.oscuro header, body.oscuro .tarjeta, body.oscuro main {
     border-color: #444;
 }
 
-.oculto { display: none; }
+.oculto { display: none; }*/
+
+body { padding-top: 80px; }
+.item-carrito-img { width: 80px; height: 80px; object-fit: contain; }
+.card-carrito { transition: all 0.3s ease; }
+[data-bs-theme="dark"] .card-carrito { background-color: #1e1e1e; border-color: #333; }

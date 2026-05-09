@@ -1,4 +1,4 @@
-/* 1. Estilos Globales */
+/* 1. Estilos Globales 
 header {
     display: flex;
     justify-content: space-between;
@@ -54,7 +54,7 @@ header {
     font-size: 0.8rem;
 }
 
-/* 3. Sección de Bienvenida */
+ 3. Sección de Bienvenida 
 main {
     flex: 1; 
     display: flex;
@@ -62,8 +62,7 @@ main {
     align-items: center;    
     padding: 20px;
 }
-
-/* MODO OSCURO SIMPLE */
+MODO OSCURO SIMPLE 
 body.oscuro {
     background-color: #727070;
     color: white;
@@ -74,3 +73,21 @@ body.oscuro header, body.oscuro .tarjeta {
 }
 
 .oculto { display: none; }
+*/
+
+body {
+    font-family: 'Roboto', sans-serif;
+    padding-top: 80px; 
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card-bienvenida {
+    min-width: 300px;
+    border: none;
+}
+.navbar-brand img {
+    transition: transform 0.3s ease;
+}
+.navbar-brand:hover img {
+    transform: rotate(15deg);
+}

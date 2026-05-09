@@ -1,4 +1,4 @@
-/* 1. Estilos Globales */
+/* 1. Estilos Globales 
 header {
     display: flex;
     justify-content: space-between;
@@ -55,7 +55,7 @@ header {
 }
 
 
-/* --- 3. BARRA DE FILTROS --- */
+ --- 3. BARRA DE FILTROS --- 
 .barra-filtros {
     display: flex;
     flex-wrap: wrap;         
@@ -65,7 +65,7 @@ header {
     background-color: #e9ecef; 
 }
 
-/* --- 4. GRID DE PRODUCTOS (TARJETAS) --- */
+ --- 4. GRID DE PRODUCTOS (TARJETAS) --- 
 .grid-productos {
     display: grid;           
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -97,7 +97,7 @@ header {
     margin-bottom: 15px;
 }
 
-/* --- 5. RESPONSIVE (CELULARES) --- */
+--- 5. RESPONSIVE (CELULARES) --- 
 @media (max-width: 600px) {
     header {
         flex-direction: column; 
@@ -115,7 +115,7 @@ header {
     }
 }
 
-/* MODO OSCURO SIMPLE */
+ MODO OSCURO SIMPLE 
 body.oscuro {
     background-color: #727070;
     color: white;
@@ -127,7 +127,7 @@ body.oscuro header, body.oscuro .tarjeta {
 
 .oculto { display: none; }
 
-/*
+/
 Flexbox (display: flex): Lo usamos para el Header porque queremos alinear cosas en una dirección (horizontal o vertical). Es unidimensional.
 
 CSS Grid (display: grid): Lo usamos para la Galería de Productos porque permite manejar filas y columnas al mismo tiempo. Es ideal para catálogos.
@@ -138,3 +138,133 @@ box-sizing: border-box: Es fundamental. Asegura que si le pones un padding a un 
 
 transition y transform: Son propiedades de diseño que mejoran la experiencia del usuario (UX), haciendo que la página se sienta interactiva y moderna.
 */
+
+/* Efecto en tarjetas 
+.tarjeta-producto {
+    transition: transform 0.3s ease, shadow 0.3s ease;
+}
+
+.tarjeta-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Ajustes Modo Oscuro 
+body.oscuro {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+body.oscuro .card {
+    background-color: #1e1e1e;
+    color: white;
+    border: 1px solid #333;
+}
+
+body.oscuro .bg-body-tertiary {
+    background-color: #1e1e1e !important;
+}*/
+/* Estilo para las flechas de las tarjetas */
+
+
+/* Altura uniforme para imágenes de productos */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    padding-top: 90px; /* Espacio para la navbar fija */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+        
+
+/* Estilos para las tarjetas de productos */
+.tarjeta-producto {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+.tarjeta-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Filtros */
+.barra-filtros {
+    background: var(--bs-tertiary-bg);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+/* Transición de tema */
+[data-bs-theme="dark"] body {
+    background-color: #121212;
+}
+    
+
+.img-carousel {
+    height: 150px;
+    object-fit: contain;
+}
+
+/* Estilo personalizado de las flechas < > */
+.carousel-control-prev, .carousel-control-next {
+    width: 15%;
+    opacity: 0; /* Invisibles hasta hacer hover */
+    transition: opacity 0.3s ease;
+}
+
+.tarjeta-producto:hover .carousel-control-prev, 
+.tarjeta-producto:hover .carousel-control-next {
+    opacity: 1;
+}
+
+.carousel-control-prev i, .carousel-control-next i {
+    background: white;
+    color: black;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 1.2rem;
+}
+
+/* Para que las flechas no se vean blancas en el fondo blanco */
+[data-bs-theme="dark"] .carousel-control-prev i, 
+[data-bs-theme="dark"] .carousel-control-next i {
+    background: #333;
+    color: white;
+}
+
+
+body {
+    font-family: 'Roboto', sans-serif;
+    padding-top: 90px; /* Espacio para la navbar fija */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para las tarjetas de productos */
+.tarjeta-producto {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+}
+.tarjeta-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Filtros */
+.barra-filtros {
+    background: var(--bs-tertiary-bg);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+/* Transición de tema */
+[data-bs-theme="dark"] body {
+    background-color: #121212;
+}

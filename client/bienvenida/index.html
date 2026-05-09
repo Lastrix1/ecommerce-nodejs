@@ -1,52 +1,86 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUNTO TECNO S.A | Bienvenido</title>
 
-    <link rel="stylesheet" href="styles.css">
-        <!-- Librerías -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
-    
-    <title>PUNTO TECNO S.A | Bienvenido</title>
-    
+
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="../assets/img/favicon.png" alt="Logo Punto Tecno" class="logo-bienvenida">
-            <h1>PUNTO TECNO S.A</h1>
-            <p>Alumno: Pertot Mabel</p>
-        </div>
-        <div class="header-controles">
-            <nav class="barra-navegacion">
-                <a href="../bienvenida/">Bienvenida</a>
-                <a href="../productos/index.html">Productos</a>
-                <a href="../carrito/">Carrito</a>
-                <a href="../ticket/">Ticket</a>
-            </nav> 
+        <!-- NAVBAR CON BREAKPOINT LG -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                    <img src="../assets/img/favicon.png" alt="Logo" width="30" height="30" class="me-2">
+                    PUNTO TECNO S.A
+                </a>
 
-            <div class="botones-config">
-                <button id="btn-tema">Cambiar Tema</button>
-                <button id="btn-admin">Admin Login</button>
+                <!-- BOTÓN HAMBURGUESA -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navOffcanvas" aria-controls="navOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- MENÚ OFFCANVAS (Derecha a Izquierda) -->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="navOffcanvas" aria-labelledby="navOffcanvasLabel">
+                    <div class="offcanvas-header border-bottom">
+                        <h5 class="offcanvas-title" id="navOffcanvasLabel">Menú Principal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="offcanvas-body">
+                        <!-- Links Verticales en móvil / Horizontales en Desktop -->
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 mb-3 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irABienvenida()">Bienvenida</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irAProductos()">Tienda</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irACarrito()">Carrito</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irATicket()">Ticket</a></li>
+                        </ul>
+
+                        <!-- Controles de Configuración -->
+                        <div class="d-flex align-items-center gap-3">
+                            <!-- Botón Sol/Luna -->
+                            <button id="btn-tema" class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i id="icono-tema" class="bi bi-sun-fill"></i>
+                            </button>
+                            <button id="btn-admin" class="btn btn-sm btn-outline-secondary">Admin Login</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <main>
-        <section id="vista-bienvenida">
-            <div class="caja-bienvenida">
-                <h2>¡Bienvenido!</h2>
-                <form id="form-inicio">
-                    <label for="nombre-usuario">Ingresa tu nombre:</label>
-                    <input type="text" id="nombre-usuario" required>
-                    <button type="submit">Continuar</button>
-                </form>
+    <main class="container">
+        <section class="row justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4">
+                <div class="card card-bienvenida shadow-lg p-4 text-center">
+                    <div class="mb-3">
+                        <img src="../assets/img/favicon.png" alt="Logo Punto Tecno" class="img-fluid" style="max-width: 70px;">
+                    </div>
+                    <h2 class="mb-2 fw-bold text-nowrap">¡Bienvenido!</h2>
+                    <p class="text-muted mb-4 small">Alumno: Pertot Mabel</p>
+                    
+                    <form id="form-inicio">
+                        <div class="mb-3 text-start">
+                            <label for="nombre-usuario" class="form-label">Ingresa tu nombre:</label>
+                            <input type="text" class="form-control" id="nombre-usuario" placeholder="Ej: Juan Pérez" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Continuar</button>
+                    </form>
+                </div>
             </div>
         </section>
-    </main><br>
+    </main>
 
+    <!-- Bootstrap Bundle JS (Necesario para el Offcanvas) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* 1. Estilos Globales */
+/* 1. Estilos Globales 
 header {
     display: flex;
     justify-content: space-between;
@@ -55,7 +55,7 @@ header {
 }
 
 
-/* 1. Contenedor de la Sección */
+/* 1. Contenedor de la Sección 
 .seccion-ticket {
     display: flex;
     justify-content: center; 
@@ -65,7 +65,7 @@ header {
     min-height: 80vh;
 }
 
-/* 2. El Cuerpo del Ticket  */
+/* 2. El Cuerpo del Ticket  
 .ticket-container {
     background-color: white;
     width: 100%;
@@ -76,7 +76,7 @@ header {
     position: relative;
 }
 
-/* 3. Encabezado del Comprobante */
+/* 3. Encabezado del Comprobante 
 .ticket-header {
     text-align: center;
     border-bottom: 2px dashed #ccc; 
@@ -95,14 +95,14 @@ header {
     text-transform: uppercase;
 }
 
-/* 4. Detalles del Cliente y Fecha */
+/* 4. Detalles del Cliente y Fecha 
 .ticket-info-cliente {
     font-size: 0.9rem;
     margin-bottom: 20px;
     line-height: 1.5;
 }
 
-/* 5. Listado de Productos */
+/* 5. Listado de Productos 
 .ticket-tabla {
     width: 100%;
     margin-bottom: 20px;
@@ -126,7 +126,7 @@ header {
     font-weight: bold;
 }
 
-/* 6. Botones de Acción Debajo del Ticket */
+/* 6. Botones de Acción Debajo del Ticket 
 .ticket-botones {
     display: flex;
     gap: 10px;
@@ -148,7 +148,7 @@ header {
 
 .btn-accion:hover { opacity: 0.8; transform: scale(1.05); }
 
-/* MODO OSCURO SIMPLE */
+/* MODO OSCURO SIMPLE 
 body.oscuro {
     background-color: #222;
     color: white;
@@ -158,5 +158,19 @@ body.oscuro header, body.oscuro .tarjeta {
     border-color: #444;
 }
 
-.oculto { display: none; }
+.oculto { display: none; }*/
 
+
+body { padding-top: 90px; background-color: var(--bs-tertiary-bg); }
+.card-ticket {
+    max-width: 600px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 20px;
+}
+.ticket-preview {
+    background: var(--bs-body-bg);
+    border-radius: 12px;
+    padding: 25px;
+    border: 2px dashed var(--bs-border-color);
+}

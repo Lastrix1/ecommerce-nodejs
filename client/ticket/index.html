@@ -1,63 +1,84 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>PUNTO TECNO S.A | Ticket</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <link rel="stylesheet" href="styles.css">
-    <!-- Librerías Externas -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
 </head>
 
 <body>
-
     <header>
-        <div class="logo">
-            <img src="../assets/img/favicon.png" alt="Logo Punto Tecno" class="logo-ticket">
-            <h1>PUNTO TECNO S.A</h1>
-            <p>Alumno: Pertot Mabel</p>
-        </div>
-        <div class="header-controles">
-            <nav class="barra-navegacion">
-                <a href="../bienvenida/">Bienvenida</a>
-                <a href="../productos/index.html">Productos</a>
-                <a href="../carrito/">Tienda</a>
-                <a href="../ticket/">Ticket</a>
-            </nav> 
+        <!-- NAVBAR UNIFICADA -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                    <img src="../assets/img/favicon.png" alt="Logo" width="30" height="30" class="me-2">
+                    PUNTO TECNO S.A
+                </a>
 
-            <div class="botones-config">
-                <button id="btn-tema">Cambiar Tema</button>
-                <button id="btn-admin">Admin Login</button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="navOffcanvas">
+                    <div class="offcanvas-header border-bottom">
+                        <h5 class="offcanvas-title">Menú</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 mb-3 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irABienvenida()">Bienvenida</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irAProductos()">Tienda</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irACarrito()">Carrito</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="irATicket()">Ticket</a></li>
+                        </ul>
+                        <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                            <button id="btn-tema" class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i id="icono-tema" class="bi bi-sun-fill"></i>
+                            </button>
+                            <button id="btn-admin" class="btn btn-sm btn-outline-secondary">Admin Login</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <main class="ticket-container">
-        <div class="card-ticket">
-            <div class="icon-success">
-                <svg viewBox="0 0 24 24" width="80" height="80">
-                    <circle cx="12" cy="12" r="11" fill="none" stroke="#a5dc86" stroke-width="2"/>
-                    <path d="M7 12l3 3 7-7" fill="none" stroke="#a5dc86" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+    <main class="container">
+        <div class="card card-ticket shadow-lg p-4 p-md-5 text-center bg-body">
+            <div class="mb-4">
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
             </div>
 
-            <h1>¡Gracias por elegirnos!</h1>
-            <p>Tu compra en <strong>PUNTO TECNO S.A</strong> ha sido exitosa.</p>
+            <h1 class="fw-bold mb-2">¡Gracias por elegirnos!</h1>
+            <p class="text-secondary mb-4">Tu compra en <strong>PUNTO TECNO S.A</strong> ha sido exitosa.</p>
 
-            <div id="detalle-ticket" class="ticket-preview">
-            <!-- Se llenará dinámicamente con JS -->
+            <div id="detalle-ticket" class="ticket-preview text-start mb-4">
+                <!-- Se llenará dinámicamente -->
             </div>
 
-            <div class="ticket-actions">
-                <button id="btn-descargar" class="btn-pdf">Descargar Ticket PDF</button>
-                <button onclick="window.salir()" class="btn-salir">Salir y Finalizar</button>
+            <div class="d-grid gap-3 d-sm-flex justify-content-center">
+                <button id="btn-descargar" class="btn btn-dark btn-lg px-4">
+                    <i class="bi bi-file-earmark-pdf me-2"></i>Descargar PDF
+                </button>
+                <button onclick="salirDelSistema()" class="btn btn-outline-danger btn-lg px-4">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar y Salir
+                </button>
             </div>
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
