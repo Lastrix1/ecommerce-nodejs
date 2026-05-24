@@ -1,0 +1,35 @@
+:root {
+  --bs-primary: #0066ff;
+  --bs-secondary: #2a2a2a;
+  --bs-success: #16a34a;
+  --bs-warning: #ea580c;
+  --bs-danger: #ea580c;
+  --bs-dark: #1a1a1a;
+  --bs-light: #f9fafb;
+}
+
+html[data-bs-theme="light"] {
+  --bs-body-bg: #f9fafb;
+  --bs-body-color: #1a1a1a;
+  --bs-tertiary-bg: #f9fafb;
+  --bs-border-color: #dee2e6;
+}
+
+html[data-bs-theme="dark"] {
+  --bs-body-bg: #1a1a1a;
+  --bs-body-color: #ffffff;
+  --bs-light: #2a2a2a;
+  --bs-dark: #ffffff;
+  --bs-tertiary-bg: #2a2a2a;
+  --bs-border-color: #444;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  padding-top: 80px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.oculto {
+  display: none !important;
+}

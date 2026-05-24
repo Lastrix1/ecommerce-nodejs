@@ -1,63 +1,18 @@
-// 1. Variables Globales
 let carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
 const cliente = localStorage.getItem('cliente') || "Consumidor Final";
 
-const htmlElement = document.documentElement;
-const btnTema = document.getElementById('btn-tema');
-const iconoTema = document.getElementById('icono-tema');
-
-// 2. Carga Inicial del DOM
 document.addEventListener('DOMContentLoaded', () => {
-    const temaGuardado = localStorage.getItem('tema') || 'light';
-    aplicarTema(temaGuardado);
-
     renderizarResumen();
-
-    // Eventos de botones
-    if (btnTema) {
-        btnTema.onclick = () => {
-            const nuevoTema = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            aplicarTema(nuevoTema);
-        };
-    }
 
     const btnConfirmar = document.getElementById('btn-confirmar');
     if (btnConfirmar) btnConfirmar.onclick = finalizarCompra;
-
-    const btnAdmin = document.getElementById('btn-admin');
-    if (btnAdmin) {
-        btnAdmin.onclick = () => {
-            const esOscuro = htmlElement.getAttribute('data-bs-theme') === 'dark';
-            Swal.fire({
-                title: 'Módulo en Análisis',
-                text: 'El panel administrativo está en fase de auditoría técnica.',
-                icon: 'info',
-                background: esOscuro ? '#333' : '#fff',
-                color: esOscuro ? '#fff' : '#000',
-            });
-        };
-    }
 });
 
-// --- FUNCIONES DE TEMA ---
-function aplicarTema(tema) {
-    htmlElement.setAttribute('data-bs-theme', tema);
-    localStorage.setItem('tema', tema);
-    if (tema === 'dark') {
-        iconoTema.className = 'bi bi-moon-fill';
-        btnTema.classList.replace('btn-outline-warning', 'btn-outline-info');
-    } else {
-        iconoTema.className = 'bi bi-sun-fill';
-        btnTema.classList.replace('btn-outline-info', 'btn-outline-warning');
-    }
-}
-
-// --- RENDERIZADO DEL CARRITO ---
 function renderizarResumen() {
     const contenedor = document.getElementById('lista-productos');
     const totalTxt = document.getElementById('total-resumen');
     const cantTxt = document.getElementById('cant-items');
-    
+
     if (!contenedor) return;
 
     if (carrito.length === 0) {
@@ -97,6 +52,9 @@ function renderizarResumen() {
                     </div>
                     <div class="col-6 col-md-2 text-end mt-3 mt-md-0">
                         <span class="fw-bold text-primary">$${subtotal}</span>
+                        <button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarProducto(${p.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>`;
@@ -107,7 +65,6 @@ function renderizarResumen() {
 }
 
 window.actualizarCantidad = (id, cambio) => {
-
     localStorage.setItem('compraConfirmada', 'false');
     const producto = carrito.find(p => p.id === id);
     if (producto) {
@@ -121,17 +78,21 @@ window.actualizarCantidad = (id, cambio) => {
 
     if (carrito.length === 0) {
         Swal.fire('Carrito vacío', 'Regresando a la tienda...', 'info').then(() => {
-            window.location.href = "../productos/index.html";
+            window.location.href = './productos.html';
         });
     }
 };
+window.eliminarProducto = (id) => {
+    carrito = carrito.filter(p => p.id !== id);
+    localStorage.setItem('carritoActual', JSON.stringify(carrito));
+    renderizarResumen();
+};
 
-// --- FINALIZAR COMPRA ---
 async function finalizarCompra() {
     if (carrito.length === 0) return;
 
     const total = carrito.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
-    const esOscuro = htmlElement.getAttribute('data-bs-theme') === 'dark';
+    const oscuro = esOscuro();
 
     const result = await Swal.fire({
         title: '¿Confirmar Pedido?',
@@ -140,34 +101,33 @@ async function finalizarCompra() {
         showCancelButton: true,
         confirmButtonText: 'Sí, finalizar',
         cancelButtonText: 'Seguir comprando',
-        background: esOscuro ? '#333' : '#fff',
-        color: esOscuro ? '#fff' : '#000',
+        background: oscuro ? '#333' : '#fff',
+        color: oscuro ? '#fff' : '#000',
         confirmButtonColor: '#0d6efd'
     });
 
     if (result.isConfirmed) {
-
         localStorage.setItem('compraConfirmada', 'true');
 
         const nuevaVenta = {
-            usuario: cliente, 
+            usuario: cliente,
             fecha: new Date().toLocaleString(),
             total: total,
-            productos: carrito 
+            productos: carrito
         };
 
         const historial = JSON.parse(localStorage.getItem('historialVentas')) || [];
         historial.push(nuevaVenta);
         localStorage.setItem('historialVentas', JSON.stringify(historial));
 
-        window.location.href = "../ticket/index.html";
-    }else if (result.dismiss === Swal.DismissReason.cancel) {
-        window.location.href = "../productos/index.html";
+        window.location.href = './ticket.html';
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+        window.location.href = './productos.html';
     }
 }
 
 window.salir = () => {
-    const esOscuro = htmlElement.getAttribute('data-bs-theme') === 'dark';
+    const oscuro = esOscuro();
     Swal.fire({
         title: '¿Vaciar carrito y salir?',
         text: "Se perderán tus productos seleccionados.",
@@ -176,58 +136,54 @@ window.salir = () => {
         confirmButtonColor: '#dc3545',
         confirmButtonText: 'Sí, vaciar',
         cancelButtonText: 'No, quedarme',
-        background: esOscuro ? '#333' : '#fff',
-        color: esOscuro ? '#fff' : '#000',
+        background: oscuro ? '#333' : '#fff',
+        color: oscuro ? '#fff' : '#000',
     }).then((result) => {
         if (result.isConfirmed) {
             localStorage.removeItem('carritoActual');
-            localStorage.removeItem('compraConfirmada');
-            
+            carrito = [];
+            renderizarResumen();
+
             Swal.fire({
-                title: '¡Hasta pronto!',
-                text: 'En breve se reiniciará el sistema, redirigiendo ...',
+                title: 'Carrito vaciado',
+                text: 'Tu carrito fue limpiado correctamente.',
                 icon: 'success',
-                timer: 3500, 
-                timerProgressBar: true, 
+                timer: 2000,
                 showConfirmButton: false,
-                allowOutsideClick: false,
-                background: esOscuro ? '#333' : '#fff',
-                color: esOscuro ? '#fff' : '#000',
-                willClose: () => {
-                    window.location.href = "../bienvenida/index.html";
-                }
+                background: oscuro ? '#333' : '#fff',
+                color: oscuro ? '#fff' : '#000',
             });
-
-
         }
     });
 };
 
-// --- NAVEGACIÓN CONTROLADA ---
+//NAVEGACIÓN
+
+window.irABienvenida = function () {
+    Swal.fire({
+        title: 'Volver al inicio',
+        text: 'Si continúas perderás el progreso actual.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ir a Bienvenida',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0d6efd'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('carritoActual');
+            localStorage.removeItem('compraConfirmada');
+            window.location.href = '../index.html';
+        }
+    });
+};
 
 window.irAProductos = function () {
-
-    const usuario = localStorage.getItem('cliente');
-
-    if (!usuario) {
-        Swal.fire({
-            title: 'Acceso restringido',
-            text: 'Debes ingresar tu nombre para continuar.',
-            icon: 'warning',
-            confirmButtonColor: '#0d6efd',
-
-            timer: 5000,
-        });
-        return;
-    }
-
-    window.location.href = "../productos/index.html";
+    window.location.href = './productos.html';
 };
 
 window.irACarrito = function () {
-
     const usuario = localStorage.getItem('cliente');
-    const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
+    const carritoActual = JSON.parse(localStorage.getItem('carritoActual')) || [];
 
     if (!usuario) {
         Swal.fire({
@@ -235,19 +191,17 @@ window.irACarrito = function () {
             text: 'Ingresa tu nombre primero.',
             icon: 'warning',
             confirmButtonColor: '#0d6efd',
-
             timer: 5000,
         });
         return;
     }
 
-    if (carrito.length === 0) {
+    if (carritoActual.length === 0) {
         Swal.fire({
             title: 'Carrito vacío',
             text: 'Debes agregar productos antes de ingresar.',
             icon: 'info',
             confirmButtonColor: '#0d6efd',
-
             timer: 5000,
         });
         return;
@@ -258,82 +212,62 @@ window.irACarrito = function () {
         text: `Presiona "Confirmar Pedido" o "Salir" para continuar.`,
         icon: 'info',
         confirmButtonColor: '#0d6efd',
-
         timer: 5000,
     }).then((result) => {
-
         if (result.isConfirmed) {
-            window.location.href = "../carrito/index.html";
+            window.location.href = './carrito.html';
         }
     });
 };
 
 window.irATicket = function () {
+    const usuario = localStorage.getItem('cliente');
+    const carritoActual = JSON.parse(localStorage.getItem('carritoActual')) || [];
+    const compraConfirmada = localStorage.getItem('compraConfirmada');
 
-    const usuario =
-        localStorage.getItem('cliente');
-
-    const carrito =
-        JSON.parse(localStorage.getItem('carritoActual')) || [];
-
-    const compraConfirmada =
-        localStorage.getItem('compraConfirmada');
-
-    // VALIDAR LOGIN
     if (!usuario) {
-
         Swal.fire({
             title: 'Acceso denegado',
             text: 'Primero debes iniciar sesión.',
             icon: 'warning',
-
             timer: 2500,
             showConfirmButton: false
         });
-
         return;
     }
 
-    // VALIDAR CARRITO
-    if (carrito.length === 0) {
-
+    if (carritoActual.length === 0) {
         Swal.fire({
             title: 'Carrito vacío',
             text: 'Debes agregar productos.',
             icon: 'info',
-
             timer: 2500,
             showConfirmButton: false
         });
-
         return;
     }
 
-    // VALIDAR COMPRA CONFIRMADA
     if (!compraConfirmada) {
-
         Swal.fire({
             title: 'Pedido no confirmado',
             text: 'Debes confirmar el pedido antes de continuar.',
             icon: 'warning',
-
             timer: 3000,
             showConfirmButton: false
         });
-
         return;
     }
 
     if (compraConfirmada === 'false') {
-
         Swal.fire({
             title: 'Pedido pendiente',
             text: 'Tu compra aún no ha sido confirmada.',
             icon: 'info',
-
             timer: 3000,
             showConfirmButton: false
         });
+        return;
     }
-}
 
+    window.location.href = './ticket.html';
+};

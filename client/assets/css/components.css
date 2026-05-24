@@ -1,0 +1,183 @@
+html body .navbar-brand img {
+    transition: transform 0.3s ease;
+}
+
+html body .navbar-brand:hover img {
+    transform: rotate(15deg);
+}
+
+html body .navbar.navbar-expand-lg {
+    background-color: #ffffff !important;
+    border-bottom: 2px solid #0066ff !important;
+}
+
+html[data-bs-theme="dark"] body .navbar.navbar-expand-lg {
+    background-color: #1a1a1a !important;
+    border-bottom: 2px solid #0066ff !important;
+}
+
+html body .navbar .nav-link {
+    color: #1a1a1a !important;
+    font-weight: 600;
+}
+
+html body .navbar .nav-link:hover {
+    color: #0066ff !important;
+}
+
+html[data-bs-theme="dark"] body .navbar .nav-link {
+    color: #ffffff !important;
+}
+
+html body .btn.btn-primary,
+html body .btn.btn-primary:active,
+html body .btn.btn-primary:focus {
+    background-color: #0066ff !important;
+    border-color: #0066ff !important;
+    color: #ffffff !important;
+}
+
+html body .btn.btn-primary:hover {
+    background-color: #0052cc !important;
+    border-color: #0052cc !important;
+}
+
+html body .btn.btn-success,
+html body .btn.btn-success:active,
+html body .btn.btn-success:focus {
+    background-color: #16a34a !important;
+    border-color: #16a34a !important;
+    color: #ffffff !important;
+}
+
+html body .btn.btn-outline-danger,
+html body .btn.btn-outline-danger:active,
+html body .btn.btn-outline-danger:focus {
+    color: #ea580c !important;
+    border-color: #ea580c !important;
+}
+
+html body .btn.btn-outline-danger:hover {
+    background-color: #ea580c !important;
+    color: #ffffff !important;
+}
+
+html body .card {
+    background-color: #ffffff !important;
+    border: none !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-bs-theme="dark"] body .card {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+}
+
+html body .tarjeta-producto {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+html body .tarjeta-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+}
+
+html body .barra-filtros {
+    background: var(--bs-tertiary-bg);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+html body .img-carousel {
+    height: 150px;
+    object-fit: contain;
+}
+
+html body .carousel-control-prev,
+html body .carousel-control-next {
+    width: 15%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+html body .tarjeta-producto:hover .carousel-control-prev,
+html body .tarjeta-producto:hover .carousel-control-next {
+    opacity: 1;
+}
+
+html body .carousel-control-prev i,
+html body .carousel-control-next i {
+    background: white;
+    color: black;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 1.2rem;
+}
+
+html[data-bs-theme="dark"] body .carousel-control-prev i,
+html[data-bs-theme="dark"] body .carousel-control-next i {
+    background: #333;
+    color: white;
+}
+
+html body .item-carrito-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+html body .card-carrito {
+    transition: all 0.3s ease;
+}
+
+html[data-bs-theme="dark"] body .card-carrito {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+}
+
+html body .card-ticket {
+    max-width: 600px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 20px;
+}
+
+html body .ticket-preview {
+    background: var(--bs-body-bg);
+    border-radius: 12px;
+    padding: 25px;
+    border: 2px dashed var(--bs-border-color);
+}
+
+html body .card-bienvenida {
+    min-width: 300px;
+    border: none;
+}
+
+html body footer,
+html body .footer {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+html body .text-primary {
+    color: #0066ff !important;
+}
+
+html body .navbar.bg-body-tertiary {
+    background-color: #ffffff !important;
+}
+
+html[data-bs-theme="dark"] body .navbar.bg-body-tertiary {
+    background-color: #1a1a1a !important;
+}

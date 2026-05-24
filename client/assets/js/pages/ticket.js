@@ -1,48 +1,12 @@
-// 1. Recuperación de datos y Variables Globales
 const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
 const cliente = localStorage.getItem('cliente') || "Consumidor Final";
 
-const htmlElement = document.documentElement;
-const btnTema = document.getElementById('btn-tema');
-const iconoTema = document.getElementById('icono-tema');
-
 document.addEventListener('DOMContentLoaded', () => {
-    const temaGuardado = localStorage.getItem('tema') || 'light';
-    aplicarTema(temaGuardado);
-
-    // Renderizar los datos del ticket
     mostrarResumenEnPantalla();
 
-    // Evento para cambiar el tema
-    if (btnTema) {
-        btnTema.onclick = () => {
-            const nuevoTema = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            aplicarTema(nuevoTema);
-        };
-    }
-
-    // Configurar botón de descarga
     const btnDescargar = document.getElementById('btn-descargar');
-    if (btnDescargar) {
-        btnDescargar.onclick = generarPDF;
-    }
+    if (btnDescargar) btnDescargar.onclick = generarPDF;
 });
-
-// --- FUNCIONES DE INTERFAZ ---
-
-function aplicarTema(tema) {
-    htmlElement.setAttribute('data-bs-theme', tema);
-    localStorage.setItem('tema', tema);
-    
-    // Cambiar iconos y estilos del botón según el tema
-    if (tema === 'dark') {
-        if (iconoTema) iconoTema.className = 'bi bi-moon-fill';
-        btnTema?.classList.replace('btn-outline-warning', 'btn-outline-info');
-    } else {
-        if (iconoTema) iconoTema.className = 'bi bi-sun-fill';
-        btnTema?.classList.replace('btn-outline-info', 'btn-outline-warning');
-    }
-}
 
 function mostrarResumenEnPantalla() {
     const contenedor = document.getElementById('detalle-ticket');
@@ -50,7 +14,7 @@ function mostrarResumenEnPantalla() {
 
     if (carrito.length === 0) {
         contenedor.innerHTML = `<div class="text-center py-3">
-                                    <i class="bi bi-exclamación-triangle text-warning fs-1"></i>
+                                    <i class="bi bi-exclamation-triangle text-warning fs-1"></i>
                                     <p class="mt-2">No hay productos registrados en esta compra.</p>
                                 </div>`;
         return;
@@ -88,8 +52,6 @@ function mostrarResumenEnPantalla() {
     contenedor.innerHTML = html;
 }
 
-// --- GENERACIÓN DE DOCUMENTOS ---
-
 async function generarPDF() {
     try {
         const { PDFDocument, StandardFonts, rgb } = PDFLib;
@@ -97,10 +59,10 @@ async function generarPDF() {
         const page = pdfDoc.addPage([400, 600]);
         const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
         const fontNormal = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const oscuro = esOscuro();
 
         let y = 560;
 
-        // Encabezado del PDF
         page.drawText("PUNTO TECNO S.A.", { x: 50, y, size: 22, font: fontBold, color: rgb(0.05, 0.4, 0.9) });
         y -= 40;
         page.drawText(`CLIENTE: ${cliente.toUpperCase()}`, { x: 50, y, size: 10, font: fontNormal });
@@ -110,7 +72,6 @@ async function generarPDF() {
         page.drawLine({ start: { x: 50, y }, end: { x: 350, y }, thickness: 1, opacity: 0.5 });
         y -= 30;
 
-        // Listado de productos
         carrito.forEach(p => {
             page.drawText(`${p.cantidad}x ${p.nombre.substring(0, 30)}`, { x: 50, y, size: 10, font: fontNormal });
             page.drawText(`$${(p.precio * p.cantidad).toLocaleString()}`, { x: 300, y, size: 10, font: fontNormal });
@@ -121,12 +82,10 @@ async function generarPDF() {
         page.drawLine({ start: { x: 50, y }, end: { x: 350, y }, thickness: 1.5 });
         y -= 30;
 
-        // Total final
         const totalFinal = carrito.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
         page.drawText("TOTAL:", { x: 50, y, size: 16, font: fontBold });
         page.drawText(`$${totalFinal.toLocaleString()}`, { x: 270, y, size: 16, font: fontBold });
 
-        // Guardar y descargar
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const link = document.createElement('a');
@@ -134,29 +93,26 @@ async function generarPDF() {
         link.download = `Ticket_PuntoTecno_${Date.now()}.pdf`;
         link.click();
 
-        // Esperar un instante para asegurar descarga
         setTimeout(() => {
-
             Swal.fire({
                 title: '¡Compra finalizada!',
-                text: 'Tu ticket fue descargado correctamente. Redirigiendo a Inicio...',
+                text: 'Tu ticket fue descargado correctamente. ¿Deseas salir del sistema?',
                 icon: 'success',
-                timer: 3500,
-                showConfirmButton: false,
-                confirmButtonText: 'Volver al inicio',
+                background: oscuro ? '#333' : '#fff',
+                color: oscuro ? '#fff' : '#000',
+                showCancelButton: true,
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No',
                 confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#6c757d',
                 allowOutsideClick: false
-            }).then(() => {
-
-            // Limpiar carrito
-            localStorage.removeItem('carritoActual');
-
-            // Redireccionar
-            window.location.href =
-                "../bienvenida/index.html";
-        });
-
-    }, 1000);
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('carritoActual');
+                    window.location.href = '../index.html';
+                }
+            });
+        }, 1000);
 
     } catch (error) {
         console.error("Error PDF:", error);
@@ -165,9 +121,7 @@ async function generarPDF() {
 }
 
 function salirDelSistema() {
-    // Limpiar carrito al finalizar con éxito
     localStorage.removeItem('carritoActual');
-    
     Swal.fire({
         title: '¡Vuelve pronto!',
         text: 'Redirigiendo a la página de bienvenida...',
@@ -175,30 +129,42 @@ function salirDelSistema() {
         timer: 2000,
         showConfirmButton: false
     }).then(() => {
-        window.location.href = "../bienvenida/index.html";
+        window.location.href = '../index.html';
     });
 }
 
-// --- NAVEGACIÓN CONTROLADA ---
+//  NAVEGACIÓN 
+
+window.irABienvenida = function () {
+    Swal.fire({
+        title: 'Volver al inicio',
+        text: 'Si continúas perderás el progreso actual.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ir a Bienvenida',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0d6efd'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('carritoActual');
+            localStorage.removeItem('compraConfirmada');
+            window.location.href = '../index.html';
+        }
+    });
+};
 
 window.irAProductos = function () {
-
     const usuario = localStorage.getItem('cliente');
-
     if (!usuario) {
-
         Swal.fire({
             title: 'Acceso restringido',
             text: 'Debes ingresar tu nombre para continuar.',
             icon: 'warning',
             confirmButtonColor: '#0d6efd',
-
             timer: 5000,
         });
-
         return;
     }
-
     Swal.fire({
         title: 'Ingresar a Tienda',
         text: `Bienvenido ${usuario}, ¿deseas continuar?`,
@@ -208,19 +174,15 @@ window.irAProductos = function () {
         cancelButtonText: 'Cancelar',
         confirmButtonColor: '#0d6efd'
     }).then((result) => {
-
         if (result.isConfirmed) {
-
-            window.location.href =
-                "../productos/index.html";
+            window.location.href = './productos.html';
         }
     });
 };
 
 window.irACarrito = function () {
-
     const usuario = localStorage.getItem('cliente');
-    const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
+    const carritoActual = JSON.parse(localStorage.getItem('carritoActual')) || [];
 
     if (!usuario) {
         Swal.fire({
@@ -228,31 +190,28 @@ window.irACarrito = function () {
             text: 'Ingresa tu nombre primero.',
             icon: 'warning',
             confirmButtonColor: '#0d6efd',
-
             timer: 5000,
         });
         return;
     }
 
-    if (carrito.length === 0) {
+    if (carritoActual.length === 0) {
         Swal.fire({
             title: 'Carrito vacío',
             text: 'Debes agregar productos antes de ingresar.',
             icon: 'info',
             confirmButtonColor: '#0d6efd',
-
             timer: 5000,
         });
         return;
     }
 
-    window.location.href = "../carrito/index.html";
+    window.location.href = './carrito.html';
 };
 
 window.irATicket = function () {
-
     const usuario = localStorage.getItem('cliente');
-    const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
+    const carritoActual = JSON.parse(localStorage.getItem('carritoActual')) || [];
 
     if (!usuario) {
         Swal.fire({
@@ -260,24 +219,21 @@ window.irATicket = function () {
             text: 'Primero debes iniciar sesión.',
             icon: 'warning',
             confirmButtonColor: '#0d6efd',
-
             timer: 5000,
         });
         return;
     }
 
-    if (carrito.length === 0) {
+    if (carritoActual.length === 0) {
         Swal.fire({
             title: 'Sin compra registrada',
             text: 'Debes confirmar tu pedido primero.',
             icon: 'info',
             confirmButtonColor: '#0d6efd',
-
             timer: 5000,
         });
         return;
     }
 
-    window.location.href = "../carrito/index.html";
+    window.location.href = './ticket.html';
 };
-
