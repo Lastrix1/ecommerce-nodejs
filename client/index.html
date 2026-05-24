@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./assets/css/global.css">
     <link rel="stylesheet" href="./assets/css/components.css">
 
- </head>
+</head> 
 <body>
     <header>
         <!-- NAVBAR CON BREAKPOINT LG -->
@@ -23,6 +23,11 @@
                     <img src="./assets/img/favicon.png" alt="Logo" width="30" height="30" class="me-2">
                     PUNTO TECNO S.A
                 </a>
+
+                <!-- Botón Sol/Luna -->
+                <button id="btn-tema" class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                    <i id="icono-tema" class="bi bi-sun-fill"></i>
+                </button>
 
                 <!-- BOTÓN HAMBURGUESA -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navOffcanvas" aria-controls="navOffcanvas">
@@ -45,10 +50,6 @@
 
                         <!-- Controles de Configuración -->
                         <div class="d-flex align-items-center gap-3">
-                            <!-- Botón Sol/Luna -->
-                            <button id="btn-tema" class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                <i id="icono-tema" class="bi bi-sun-fill"></i>
-                            </button>
                             <button id="btn-admin" class="btn btn-sm btn-outline-secondary">Admin Login</button>
                         </div>
                     </div>
@@ -65,7 +66,7 @@
                         <img src="./assets/img/favicon.png" alt="Logo Punto Tecno" class="img-fluid" style="max-width: 70px;">
                     </div>
                     <h2 class="mb-2 fw-bold text-nowrap">¡Bienvenido!</h2>
-                    <p class="text-muted mb-4 small">Alumno: Pertot Mabel</p>
+                    <hr>
                     
                     <form id="form-inicio" novalidate>
                         <div class="mb-3 text-start">

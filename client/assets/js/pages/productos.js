@@ -187,28 +187,3 @@ window.irACarrito = function () {
     }
     window.location.href = './carrito.html';
 };
-
-window.irATicket = function () {
-    const usuario = localStorage.getItem('cliente');
-    if (!usuario) {
-        Swal.fire({
-            title: 'Acceso denegado',
-            text: 'Primero debes iniciar sesión.',
-            icon: 'warning',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-    if (carrito.length === 0) {
-        Swal.fire({
-            title: 'Sin compra registrada',
-            text: 'Debes confirmar tu pedido primero.',
-            icon: 'info',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-    window.location.href = './ticket.html';
-};

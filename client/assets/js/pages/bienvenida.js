@@ -47,74 +47,18 @@ if (formInicio) {
     });
 }
 
-// NAVEGACIÓN 
-
-window.irABienvenida = function () {
-    Swal.fire({
-        title: 'Acceso denegado',
-        text: 'Debes ingresar tu nombre para continuar.',
-        icon: 'warning',
-        timer: 5000,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            localStorage.removeItem('carritoActual');
-            localStorage.removeItem('compraConfirmada');
-            window.location.href = '../index.html';
-        }
+const btnAdmin = document.getElementById('btn-admin');
+if (btnAdmin) {
+    btnAdmin.addEventListener('click', () => {
+        const oscuro = esOscuro();
+        Swal.fire({
+            title: 'Módulo en Análisis',
+            text: 'El panel administrativo está en fase de auditoría técnica.',
+            icon: 'info',
+            background: oscuro ? '#333' : '#fff',
+            color: oscuro ? '#fff' : '#000',
+            confirmButtonColor: '#007bff',
+            confirmButtonText: 'Cerrar',
+        });
     });
-};
-
-window.irAProductos = function () {
-    const usuario = localStorage.getItem('cliente');
-    if (!usuario) {
-        Swal.fire({
-            title: 'Acceso restringido',
-            text: 'Debes ingresar tu nombre para continuar.',
-            icon: 'warning',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-    Swal.fire({
-        title: 'Acceso denegado',
-        text: 'Primero debes iniciar sesión.',
-        icon: 'warning',
-        confirmButtonColor: '#0d6efd',
-        timer: 5000,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = '../index.html';
-        }
-    });
-};
-
-window.irACarrito = function () {
-    const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
-    if (carrito.length === 0) {
-        Swal.fire({
-            title: 'Acceso denegado',
-            text: 'Primero debes iniciar sesión.',
-            icon: 'warning',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-    window.location.href = './pages/carrito.html';
-};
-
-window.irATicket = function () {
-    const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
-    if (carrito.length === 0) {
-        Swal.fire({
-            title: 'Acceso denegado',
-            text: 'Primero debes iniciar sesión.',
-            icon: 'warning',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-    window.location.href = './pages/ticket.html';
-};
+}

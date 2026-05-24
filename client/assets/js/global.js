@@ -28,25 +28,16 @@ if (btnTema) {
     });
 }
 
-const btnAdmin = document.getElementById('btn-admin');
-if (btnAdmin) {
-    btnAdmin.addEventListener('click', () => {
-        const oscuro = esOscuro();
-        Swal.fire({
-            title: 'Módulo en Análisis',
-            text: 'El panel administrativo está en fase de auditoría técnica.',
-            icon: 'info',
-            background: oscuro ? '#333' : '#fff',
-            color: oscuro ? '#fff' : '#000',
-            confirmButtonColor: '#007bff',
-            confirmButtonText: 'Cerrar',
-        });
-    });
+function crearFooter() {
+    const footer = document.createElement('footer');
+    footer.textContent = "Integrantes: Busico Lautaro, Pertot Mabel, Raczkowski Martin."
+    document.body.append(footer);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
     const temaGuardado = localStorage.getItem('tema') || 'light';
     aplicarTema(temaGuardado);
+    crearFooter();
 });
 
 function esOscuro() {
