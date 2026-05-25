@@ -308,7 +308,6 @@ html[data-bs-theme="dark"] body .navbar.bg-body-tertiary {
     background-color: var(--color-dark) !important;
 }
 
-/* Ocultar el botón en pantallas grandes usando el breakpoint de Bootstrap (992px) */
 @media (min-width: 992px) {
     html body .solo-movil {
         display: none !important;
