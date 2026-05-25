@@ -34,7 +34,7 @@ if (btnAdmin) {
         const oscuro = esOscuro();
         Swal.fire({
             title: 'Módulo en Análisis',
-            text: 'El panel administrativo está en fase de auditoría técnica.',
+            text: 'Se encuentra en fase de desarrollo.',
             icon: 'info',
             background: oscuro ? '#333' : '#fff',
             color: oscuro ? '#fff' : '#000',

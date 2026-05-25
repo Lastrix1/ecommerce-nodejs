@@ -1,3 +1,4 @@
+//CARRITO 
 let carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
 const cliente = localStorage.getItem('cliente') || "Consumidor Final";
 
@@ -46,14 +47,12 @@ function renderizarResumen() {
                         <small class="text-secondary">Precio unitario: $${p.precio}</small>
                     </div>
                     <div class="col-6 col-md-3 d-flex align-items-center gap-2 mt-3 mt-md-0">
-                        <button class="btn btn-sm btn-outline-primary" onclick="actualizarCantidad(${p.id}, -1)">-</button>
-                        <span class="fw-bold px-2">${p.cantidad}</span>
-                        <button class="btn btn-sm btn-outline-primary" onclick="actualizarCantidad(${p.id}, 1)">+</button>
-                    </div>
-                    <div class="col-6 col-md-2 text-end mt-3 mt-md-0">
-                        <span class="fw-bold text-primary">$${subtotal}</span>
-                        <button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarProducto(${p.id})">
+                        <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto(${p.id})">
                             <i class="bi bi-trash"></i>
+                        </button>
+                        <span class="fw-bold px-2">${p.cantidad}</span>
+                        <button class="btn btn-sm btn-outline-success" onclick="actualizarCantidad(${p.id}, 1)">
+                            <i class="bi bi-cart-plus"></i>
                         </button>
                     </div>
                 </div>
@@ -83,11 +82,53 @@ window.actualizarCantidad = (id, cambio) => {
     }
 };
 window.eliminarProducto = (id) => {
-    carrito = carrito.filter(p => p.id !== id);
-    localStorage.setItem('carritoActual', JSON.stringify(carrito));
-    renderizarResumen();
-};
 
+    carrito = carrito.filter(p => p.id !== id);
+
+    localStorage.setItem('carritoActual', JSON.stringify(carrito));
+
+    renderizarResumen();
+
+    if (carrito.length === 0) {
+
+        const esOscuro =
+            htmlElement.getAttribute('data-bs-theme') === 'dark';
+
+        Swal.fire({
+            title: 'Tu carrito quedó vacío',
+            text: '¿Qué deseas hacer?',
+            icon: 'question',
+
+            showCancelButton: true,
+
+            confirmButtonText: 'Volver a Tienda',
+            cancelButtonText: 'Ir a Inicio',
+
+            confirmButtonColor: '#0d6efd',
+            cancelButtonColor: '#6c757d',
+
+            background: esOscuro ? '#333' : '#fff',
+            color: esOscuro ? '#fff' : '#000'
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                window.location.href =
+                    "./productos.html";
+
+            } else {
+
+                localStorage.removeItem('cliente');
+                localStorage.removeItem('carritoActual');
+                localStorage.removeItem('compraConfirmada');
+
+                window.location.href =
+                    "../index.html";
+            }
+        });
+    }
+};
 async function finalizarCompra() {
     if (carrito.length === 0) return;
 
@@ -100,7 +141,7 @@ async function finalizarCompra() {
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sí, finalizar',
-        cancelButtonText: 'Seguir comprando',
+        cancelButtonText: 'Volver a Tienda',
         background: oscuro ? '#333' : '#fff',
         color: oscuro ? '#fff' : '#000',
         confirmButtonColor: '#0d6efd'
@@ -127,147 +168,44 @@ async function finalizarCompra() {
 }
 
 window.salir = () => {
-    const oscuro = esOscuro();
+
+    const esOscuro =
+        htmlElement.getAttribute('data-bs-theme') === 'dark';
+
     Swal.fire({
-        title: '¿Vaciar carrito y salir?',
-        text: "Se perderán tus productos seleccionados.",
+        title: '¿Vaciar carrito?',
+        text: 'Todos los productos serán eliminados.',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        confirmButtonText: 'Sí, vaciar',
-        cancelButtonText: 'No, quedarme',
-        background: oscuro ? '#333' : '#fff',
-        color: oscuro ? '#fff' : '#000',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            localStorage.removeItem('carritoActual');
-            carrito = [];
-            renderizarResumen();
 
-            Swal.fire({
-                title: 'Carrito vaciado',
-                text: 'Tu carrito fue limpiado correctamente.',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false,
-                background: oscuro ? '#333' : '#fff',
-                color: oscuro ? '#fff' : '#000',
-            });
-        }
-    });
-};
+        confirmButtonText: 'Ir a Tienda',
+        cancelButtonText: 'Ir a Bienvenida',
 
-//NAVEGACIÓN
-
-window.irABienvenida = function () {
-    Swal.fire({
-        title: 'Volver al inicio',
-        text: 'Si continúas perderás el progreso actual.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ir a Bienvenida',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#0d6efd'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            localStorage.removeItem('carritoActual');
-            localStorage.removeItem('compraConfirmada');
-            window.location.href = '../index.html';
-        }
-    });
-};
-
-window.irAProductos = function () {
-    window.location.href = './productos.html';
-};
-
-window.irACarrito = function () {
-    const usuario = localStorage.getItem('cliente');
-    const carritoActual = JSON.parse(localStorage.getItem('carritoActual')) || [];
-
-    if (!usuario) {
-        Swal.fire({
-            title: 'Debes iniciar sesión',
-            text: 'Ingresa tu nombre primero.',
-            icon: 'warning',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-
-    if (carritoActual.length === 0) {
-        Swal.fire({
-            title: 'Carrito vacío',
-            text: 'Debes agregar productos antes de ingresar.',
-            icon: 'info',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-
-    Swal.fire({
-        title: `Estas en el carrito ${usuario}`,
-        text: `Presiona "Confirmar Pedido" o "Salir" para continuar.`,
-        icon: 'info',
         confirmButtonColor: '#0d6efd',
-        timer: 5000,
+        cancelButtonColor: '#6c757d',
+
+        background: esOscuro ? '#333' : '#fff',
+        color: esOscuro ? '#fff' : '#000',
+
     }).then((result) => {
+
+        localStorage.removeItem('carritoActual');
+        localStorage.removeItem('compraConfirmada');
+
+        carrito = [];
+
         if (result.isConfirmed) {
-            window.location.href = './carrito.html';
+
+            window.location.href =
+                "./productos.html";
+        }
+
+        else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            localStorage.removeItem('cliente');
+
+            window.location.href =
+                "../index.html";
         }
     });
-};
-
-window.irATicket = function () {
-    const usuario = localStorage.getItem('cliente');
-    const carritoActual = JSON.parse(localStorage.getItem('carritoActual')) || [];
-    const compraConfirmada = localStorage.getItem('compraConfirmada');
-
-    if (!usuario) {
-        Swal.fire({
-            title: 'Acceso denegado',
-            text: 'Primero debes iniciar sesión.',
-            icon: 'warning',
-            timer: 2500,
-            showConfirmButton: false
-        });
-        return;
-    }
-
-    if (carritoActual.length === 0) {
-        Swal.fire({
-            title: 'Carrito vacío',
-            text: 'Debes agregar productos.',
-            icon: 'info',
-            timer: 2500,
-            showConfirmButton: false
-        });
-        return;
-    }
-
-    if (!compraConfirmada) {
-        Swal.fire({
-            title: 'Pedido no confirmado',
-            text: 'Debes confirmar el pedido antes de continuar.',
-            icon: 'warning',
-            timer: 3000,
-            showConfirmButton: false
-        });
-        return;
-    }
-
-    if (compraConfirmada === 'false') {
-        Swal.fire({
-            title: 'Pedido pendiente',
-            text: 'Tu compra aún no ha sido confirmada.',
-            icon: 'info',
-            timer: 3000,
-            showConfirmButton: false
-        });
-        return;
-    }
-
-    window.location.href = './ticket.html';
 };

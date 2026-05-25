@@ -17,7 +17,7 @@
 <body>
 
     <header>
-        <!-- NAVBAR UNIFICADA -->
+        <!-- NAVBAR -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
@@ -34,18 +34,11 @@
                         <h5 class="offcanvas-title">Menú</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                     </div>
-                    <div class="offcanvas-body">
-                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 mb-3 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="irABienvenida()">Bienvenida</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="irAProductos()">Tienda</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="irACarrito()">Carrito</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="irATicket()">Ticket</a></li>
-                        </ul>
+                    <div class="offcanvas-body d-flex justify-content-end"> <div class="d-flex align-items-center gap-3">
                         <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
                             <button id="btn-tema" class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                                 <i id="icono-tema" class="bi bi-sun-fill"></i>
                             </button>
-                            <button id="btn-admin" class="btn btn-sm btn-outline-secondary">Admin Login</button>
                         </div>
                     </div>
                 </div>
@@ -59,11 +52,11 @@
             <p class="lead">Revisa tus productos antes de finalizar la compra.</p>
         </div>
         
-        <!-- Contenedor Principal del Carrito -->
+        <!-- Carrito -->
         <div class="row g-4">
             <div class="col-lg-8">
                 <div id="lista-productos" class="d-flex flex-column gap-3">
-                    <!-- Inyectado por JS -->
+                    <!-- Aquí se renderizarán los productos del carrito -->
                 </div>
             </div>
 
@@ -76,7 +69,7 @@
                         <span id="cant-items">0</span>
                     </div>
                     <hr>
-                    <div class="d-flex justify-content-between mb-4">
+                    <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mb-4">
                         <span class="h5 fw-bold">Total:</span>
                         <span id="total-resumen" class="h5 fw-bold text-primary">$0</span>
                     </div>
@@ -87,11 +80,11 @@
 
                         <div class="position-relative my-2">
                             <hr>
-                            <span class="position-absolute top-50 start-50 translate-middle px-3 bg-body text-muted small"> o tambien puedes </span>
+                            <span class="position-absolute top-50 start-50 translate-middle px-1 bg-body text-muted small"> o tambien puedes </span>
                         </div>
 
                         <button onclick="window.salir()" class="btn btn-outline-danger border-0 btn-sm py-2">
-                            <i class="bi bi-trash3 me-2"></i>Vaciar carrito y salir del sistema
+                            <i class="bi bi-trash3 me-2"></i>Vaciar carrito
                         </button>
                     </div>
                 </div>
