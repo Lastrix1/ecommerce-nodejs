@@ -38,7 +38,7 @@ if (btnAdmin) {
             icon: 'info',
             background: oscuro ? '#333' : '#fff',
             color: oscuro ? '#fff' : '#000',
-            confirmButtonColor: '#007bff',
+            confirmButtonColor: '#06b6d4',
             confirmButtonText: 'Cerrar',
         });
     });

@@ -110,8 +110,8 @@ async function generarPDF() {
                 showCancelButton: true,
                 confirmButtonText: 'Si',
                 cancelButtonText: 'No',
-                confirmButtonColor: '#0d6efd',
-                cancelButtonColor: '#6c757d',
+                confirmButtonColor: '#06b6d4',
+                cancelButtonColor: '#0891b2',
                 allowOutsideClick: false
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -127,7 +127,7 @@ async function generarPDF() {
     }
 }
 
-function salirDelSistema() {
+function salir() {
     localStorage.removeItem('carritoActual');
     Swal.fire({
         title: '¡Vuelve pronto!',
@@ -150,7 +150,8 @@ window.irABienvenida = function () {
         showCancelButton: true,
         confirmButtonText: 'Ir a Bienvenida',
         cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#0d6efd'
+        confirmButtonColor: '#06b6d4',
+        cancelButtonColor: '#0891b2'
     }).then((result) => {
         if (result.isConfirmed) {
             localStorage.removeItem('carritoActual');

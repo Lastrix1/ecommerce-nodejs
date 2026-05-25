@@ -81,6 +81,7 @@ window.actualizarCantidad = (id, cambio) => {
         });
     }
 };
+
 window.eliminarProducto = (id) => {
 
     carrito = carrito.filter(p => p.id !== id);
@@ -104,8 +105,9 @@ window.eliminarProducto = (id) => {
             confirmButtonText: 'Volver a Tienda',
             cancelButtonText: 'Ir a Inicio',
 
-            confirmButtonColor: '#0d6efd',
-            cancelButtonColor: '#6c757d',
+
+            confirmButtonColor: '#06b6d4',
+            cancelButtonColor: '#0891b2',
 
             background: esOscuro ? '#333' : '#fff',
             color: esOscuro ? '#fff' : '#000'
@@ -129,6 +131,7 @@ window.eliminarProducto = (id) => {
         });
     }
 };
+
 async function finalizarCompra() {
     if (carrito.length === 0) return;
 
@@ -142,9 +145,12 @@ async function finalizarCompra() {
         showCancelButton: true,
         confirmButtonText: 'Sí, finalizar',
         cancelButtonText: 'Volver a Tienda',
-        background: oscuro ? '#333' : '#fff',
-        color: oscuro ? '#fff' : '#000',
-        confirmButtonColor: '#0d6efd'
+        confirmButtonColor: '#0891b2',
+        cancelButtonColor: '#06b6d4',
+
+        background: esOscuro ? '#333' : '#fff',
+        color: esOscuro ? '#fff' : '#000',
+
     });
 
     if (result.isConfirmed) {
@@ -181,8 +187,8 @@ window.salir = () => {
         confirmButtonText: 'Ir a Tienda',
         cancelButtonText: 'Ir a Bienvenida',
 
-        confirmButtonColor: '#0d6efd',
-        cancelButtonColor: '#6c757d',
+        confirmButtonColor: '#06b6d4',
+        cancelButtonColor: '#0891b2',
 
         background: esOscuro ? '#333' : '#fff',
         color: esOscuro ? '#fff' : '#000',

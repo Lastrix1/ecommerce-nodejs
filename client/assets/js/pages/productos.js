@@ -108,7 +108,7 @@ window.verCarrito = function () {
             title: 'Carrito vacío',
             text: 'Debes agregar productos antes de ver el carrito.',
             icon: 'warning',
-            confirmButtonColor: '#0d6efd'
+            confirmButtonColor: '#06b6d4'
         });
         return;
     }
