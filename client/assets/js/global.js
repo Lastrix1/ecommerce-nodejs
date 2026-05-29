@@ -47,6 +47,7 @@ if (btnAdmin) {
 window.addEventListener('DOMContentLoaded', () => {
     const temaGuardado = localStorage.getItem('tema') || 'light';
     aplicarTema(temaGuardado);
+    crearFooter();
 });
 
 function esOscuro() {
