@@ -28,10 +28,20 @@ if (btnTema) {
     });
 }
 
-function crearFooter() {
-    const footer = document.createElement('footer');
-    footer.textContent = "Integrantes: Busico Lautaro, Pertot Mabel, Raczkowski Martin."
-    document.body.append(footer);
+const btnAdmin = document.getElementById('btn-admin');
+if (btnAdmin) {
+    btnAdmin.addEventListener('click', () => {
+        const oscuro = esOscuro();
+        Swal.fire({
+            title: 'Módulo en Análisis',
+            text: 'Se encuentra en fase de desarrollo.',
+            icon: 'info',
+            background: oscuro ? '#333' : '#fff',
+            color: oscuro ? '#fff' : '#000',
+            confirmButtonColor: '#06b6d4',
+            confirmButtonText: 'Cerrar',
+        });
+    });
 }
 
 window.addEventListener('DOMContentLoaded', () => {

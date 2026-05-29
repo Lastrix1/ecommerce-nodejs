@@ -6,53 +6,48 @@
     <title>PUNTO TECNO S.A | Catálogo de Productos</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/components.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
-
     <header>
-        <!-- NAVBAR RESPONSIVA -->
+        <!-- NAVBAR  -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
                     <img src="../assets/img/favicon.png" alt="Logo" width="30" height="30" class="me-2">
                     PUNTO TECNO S.A
                 </a>
-
-                <!-- Botón Sol/Luna -->
-                <button id="btn-tema" class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                    <i id="icono-tema" class="bi bi-sun-fill"></i>
-                </button>
-
                 <!-- BOTÓN HAMBURGUESA -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navOffcanvas" aria-controls="navOffcanvas">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <!-- MENÚ OFFCANVAS (Derecha a Izquierda) -->
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="navOffcanvas">
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="navOffcanvas" aria-labelledby="navOffcanvasLabel">
                     <div class="offcanvas-header border-bottom">
-                        <h5 class="offcanvas-title">Menú Principal</h5>
+                        <h5 class="offcanvas-title" id="navOffcanvasLabel">Menú Principal</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    
-                    <div class="offcanvas-body">
-                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 mb-3 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="irABienvenida()">Bienvenida</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="irAProductos()">Tienda</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="irACarrito()">Carrito</a></li>
-                        </ul>
+                    </div>                    
+                    <div class="offcanvas-body d-flex justify-content-start justify-content-lg-end align-items-start align-items-lg-center"> 
+                        <div class="d-flex align-items-center gap-3">
+                            <!-- Botón Sol/Luna -->
+                            <button id="btn-tema" class="btn btn-outline-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="Cambiar tema">
+                                <i id="icono-tema" class="bi bi-sun-fill"></i>
+                            </button>
+                            <button class="btn btn-sm btn-admin solo-movil">Admin Login</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
-
     <main class="container">
         <!-- BARRA DE FILTROS -->
         <section class="barra-filtros shadow-sm">
@@ -66,10 +61,8 @@
                 </button>
             </div>
         </section>
-
         <!-- GRID DE PRODUCTOS (LAS 12 TARJETAS) -->
-        <div id="lista-productos" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
-            
+        <div id="lista-productos" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">            
             <!-- Carousel -->
             <div class="col">
                 <div class="card h-100 tarjeta-producto shadow-sm">
@@ -89,7 +82,6 @@
         </div>
     </main>
 
-    <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/global.js"></script>
     <script src="../assets/js/pages/productos.js"></script>

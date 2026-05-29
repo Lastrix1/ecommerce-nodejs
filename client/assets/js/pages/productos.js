@@ -1,3 +1,4 @@
+// PRODUCTOS
 let productosData = [];
 let carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
 
@@ -107,7 +108,7 @@ window.verCarrito = function () {
             title: 'Carrito vacío',
             text: 'Debes agregar productos antes de ver el carrito.',
             icon: 'warning',
-            confirmButtonColor: '#0d6efd'
+            confirmButtonColor: '#06b6d4'
         });
         return;
     }
@@ -117,73 +118,4 @@ window.verCarrito = function () {
 window.cerrarResumen = () => {
     const resumen = document.getElementById('vista-resumen-pedido');
     if (resumen) resumen.style.display = 'none';
-};
-
-//  NAVEGACIÓN 
-
-window.irABienvenida = function () {
-    Swal.fire({
-        title: 'Volver al inicio',
-        text: 'Si continúas perderás el progreso actual.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ir a Bienvenida',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#0d6efd'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            localStorage.removeItem('carritoActual');
-            localStorage.removeItem('compraConfirmada');
-            window.location.href = '../index.html';
-        }
-    });
-};
-
-window.irAProductos = function () {
-    const usuario = localStorage.getItem('cliente');
-    if (!usuario) {
-        Swal.fire({
-            title: 'Acceso restringido',
-            text: 'Debes ingresar tu nombre para continuar.',
-            icon: 'warning',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-    Swal.fire({
-        title: `Estas en la tienda ${usuario}`,
-        text: `¿deseas continuar?`,
-        icon: 'question',
-        confirmButtonColor: '#0d6efd',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = './productos.html';
-        }
-    });
-};
-
-window.irACarrito = function () {
-    const usuario = localStorage.getItem('cliente');
-    if (!usuario) {
-        Swal.fire({
-            title: 'Debes iniciar sesión',
-            text: 'Ingresa tu nombre primero.',
-            icon: 'warning',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-    if (carrito.length === 0) {
-        Swal.fire({
-            title: 'Carrito vacío',
-            text: 'Debes agregar productos antes de ingresar.',
-            icon: 'info',
-            confirmButtonColor: '#0d6efd',
-            timer: 5000,
-        });
-        return;
-    }
-    window.location.href = './carrito.html';
 };

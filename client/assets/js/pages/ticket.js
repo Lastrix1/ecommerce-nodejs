@@ -61,9 +61,16 @@ async function generarPDF() {
         const fontNormal = await pdfDoc.embedFont(StandardFonts.Helvetica);
         const oscuro = esOscuro();
 
-        let y = 560;
+        const logoUrl = '../assets/img/favicon.png'; 
+        const logoBytes = await fetch(logoUrl).then(res => res.arrayBuffer());
+        const logoImage = await pdfDoc.embedPng(logoBytes);
 
-        page.drawText("PUNTO TECNO S.A.", { x: 50, y, size: 22, font: fontBold, color: rgb(0.05, 0.4, 0.9) });
+        const logoDims = logoImage.scale(0.5);
+
+        let y = 500;
+
+        page.drawImage(logoImage, { x: 40, y: y, width: logoDims.width, height: logoDims.height });
+        page.drawText("PUNTO TECNO S.A.", { x: 60, y, size: 22, font: fontBold, color: rgb(0.05, 0.4, 0.9) });
         y -= 40;
         page.drawText(`CLIENTE: ${cliente.toUpperCase()}`, { x: 50, y, size: 10, font: fontNormal });
         y -= 15;
@@ -103,8 +110,8 @@ async function generarPDF() {
                 showCancelButton: true,
                 confirmButtonText: 'Si',
                 cancelButtonText: 'No',
-                confirmButtonColor: '#0d6efd',
-                cancelButtonColor: '#6c757d',
+                confirmButtonColor: '#06b6d4',
+                cancelButtonColor: '#0891b2',
                 allowOutsideClick: false
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -120,7 +127,7 @@ async function generarPDF() {
     }
 }
 
-function salirDelSistema() {
+function salir() {
     localStorage.removeItem('carritoActual');
     Swal.fire({
         title: '¡Vuelve pronto!',
@@ -133,7 +140,7 @@ function salirDelSistema() {
     });
 }
 
-//  NAVEGACIÓN 
+/*//  NAVEGACIÓN 
 
 window.irABienvenida = function () {
     Swal.fire({
@@ -143,7 +150,8 @@ window.irABienvenida = function () {
         showCancelButton: true,
         confirmButtonText: 'Ir a Bienvenida',
         cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#0d6efd'
+        confirmButtonColor: '#06b6d4',
+        cancelButtonColor: '#0891b2'
     }).then((result) => {
         if (result.isConfirmed) {
             localStorage.removeItem('carritoActual');
@@ -208,3 +216,32 @@ window.irACarrito = function () {
 
     window.location.href = './carrito.html';
 };
+
+window.irATicket = function () {
+    const usuario = localStorage.getItem('cliente');
+    const carritoActual = JSON.parse(localStorage.getItem('carritoActual')) || [];
+
+    if (!usuario) {
+        Swal.fire({
+            title: 'Acceso denegado',
+            text: 'Primero debes iniciar sesión.',
+            icon: 'warning',
+            confirmButtonColor: '#0d6efd',
+            timer: 5000,
+        });
+        return;
+    }
+
+    if (carritoActual.length === 0) {
+        Swal.fire({
+            title: 'Sin compra registrada',
+            text: 'Debes confirmar tu pedido primero.',
+            icon: 'info',
+            confirmButtonColor: '#0d6efd',
+            timer: 5000,
+        });
+        return;
+    }
+
+    window.location.href = './ticket.html';
+};*/
