@@ -50,6 +50,9 @@ function renderizarResumen() {
                         <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto(${p.id})">
                             <i class="bi bi-trash"></i>
                         </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="actualizarCantidad(${p.id}, -1)">
+                            <i class="bi bi-cart-dash"></i>
+                        </button>
                         <span class="fw-bold px-2">${p.cantidad}</span>
                         <button class="btn btn-sm btn-outline-success" onclick="actualizarCantidad(${p.id}, 1)">
                             <i class="bi bi-cart-plus"></i>
