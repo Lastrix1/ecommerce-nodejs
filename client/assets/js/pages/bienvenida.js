@@ -1,66 +1,32 @@
-// FORMULARIO DE INICIO
-const formInicio = document.getElementById('form-inicio');
+document.addEventListener("DOMContentLoaded", () => {
+    
+    const formInicio = document.getElementById('form-inicio');
 
-if (formInicio) {
-    formInicio.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const inputNombre = document.getElementById('nombre-usuario');
-        const nombre = inputNombre.value.trim();
-        const oscuro = esOscuro();
+    if (formInicio) {
+        formInicio.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-        if (!nombre) {
-            Swal.fire({
-                title: 'Campo vacío',
-                text: 'Por favor, ingresa tu nombre.',
-                icon: 'warning',
-                background: oscuro ? '#333' : '#fff',
-                color: oscuro ? '#fff' : '#000',
-                confirmButtonText: 'Cerrar',
-                confirmButtonColor: '#0d6efd',
-            });
-            return;
-        }
-        if (nombre.length < 4) {
-            Swal.fire({
-                title: 'Nombre demasiado corto',
-                text: 'El nombre debe tener al menos 4 caracteres.',
-                icon: 'warning',
-                background: oscuro ? '#333' : '#fff',
-                color: oscuro ? '#fff' : '#000',
-                confirmButtonText: 'Cerrar',
-                confirmButtonColor: '#0d6efd',
-            });
-            return;
-        }
-        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(nombre)) {
-            Swal.fire({
-                title: 'Caracteres inválidos',
-                text: 'El nombre solo puede contener letras.',
-                icon: 'warning',
-                background: oscuro ? '#333' : '#fff',
-                color: oscuro ? '#fff' : '#000',
-                confirmButtonText: 'Cerrar',
-                confirmButtonColor: '#0d6efd',
-            });
-            return;
-        }
-        localStorage.setItem('cliente', nombre);
-        window.location.href = './pages/productos.html';
-    });
-}
+            if (!formInicio.checkValidity()) {
+                formInicio.classList.add('was-validated');
+                return;
+            }
 
-const btnsAdmin = document.getElementsByClassName('btn btn-sm btn-admin');
-Array.from(btnsAdmin).forEach((boton) => {
-    boton.addEventListener('click', () => {
-        const oscuro = esOscuro();
-        Swal.fire({
-            title: 'Módulo en Análisis',
-            text: 'El panel administrativo está en fase de auditoría técnica.',
-            icon: 'info',
-            background: oscuro ? '#333' : '#fff',
-            color: oscuro ? '#fff' : '#000',
-            confirmButtonColor: '#007bff',
-            confirmButtonText: 'Cerrar',
+            const nombreUsuario = document.getElementById('nombre-usuario');
+            if (nombreUsuario) {
+                const nombre = nombreUsuario.value.trim();
+                localStorage.setItem('cliente', nombre);
+            }
+
+            window.location.href = './pages/productos.html';
+        });
+    }
+
+    const botonesAdmin = document.querySelectorAll('.btn-admin');
+    
+    botonesAdmin.forEach(btn => {
+        btn.addEventListener('click', () => {
+            window.location.href = './pages/admin/login.html';
         });
     });
-})
+
+});
