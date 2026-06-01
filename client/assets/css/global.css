@@ -1,5 +1,4 @@
 :root {
-  /* PALETA GENERAL */
   --color-primary: #06b6d4;
   --color-primary-hover: #0891b2;
   --color-secondary: #7c3aed;
@@ -9,11 +8,8 @@
   --color-light: #f8fafc;
   --color-dark: #0f172a;
   --color-card-dark: #1e293b;
-  --color-text-dark: #0f172a;
-  --color-text-light: #f8fafc;
   --color-border: #334155;
 
-  /* PALETA BOOTSTRAP  */
   --bs-primary: var(--color-primary);
   --bs-secondary: var(--color-secondary);
   --bs-success: var(--color-success);
@@ -23,7 +19,6 @@
   --bs-light: var(--color-light);
 }
 
-/* PALETA MODO TEMA CLARO */
 html[data-bs-theme="light"] {
   --bs-body-bg: #f8fafc;
   --bs-body-color: #0f172a;
@@ -31,7 +26,6 @@ html[data-bs-theme="light"] {
   --bs-border-color: #cbd5e1;
 }
 
-/* PALETA MODO TEMA OSCURO */
 html[data-bs-theme="dark"] {
   --bs-body-bg: #0f172a;
   --bs-body-color: #f8fafc;
@@ -42,17 +36,43 @@ html[data-bs-theme="dark"] {
 }
 
 body {
-
   font-family: 'Roboto', sans-serif;
-  padding-top: 80px;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .oculto {
-
   display: none !important;
+}
+
+.swal2-popup .swal2-styled.swal2-confirm {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: none !important;
+}
+
+.swal2-popup .swal2-styled.swal2-cancel {
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
+}
+
+html[data-bs-theme="dark"] .swal2-popup {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+html[data-bs-theme="dark"] .swal2-title,
+html[data-bs-theme="dark"] .swal2-html-container {
+  color: #f8fafc !important;
+}
+
+html[data-bs-theme="light"] .swal2-popup {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html[data-bs-theme="light"] .swal2-title,
+html[data-bs-theme="light"] .swal2-html-container {
+  color: #0f172a !important;
 }

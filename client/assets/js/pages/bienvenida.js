@@ -1,27 +1,32 @@
-// FORMULARIO DE INICIO
-const formInicio = document.getElementById('form-inicio');
+document.addEventListener("DOMContentLoaded", () => {
+    
+    const formInicio = document.getElementById('form-inicio');
 
-if (formInicio) {
+    if (formInicio) {
+        formInicio.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-    formInicio.addEventListener('submit', (e) => {
+            if (!formInicio.checkValidity()) {
+                formInicio.classList.add('was-validated');
+                return;
+            }
 
-        e.preventDefault();
+            const nombreUsuario = document.getElementById('nombre-usuario');
+            if (nombreUsuario) {
+                const nombre = nombreUsuario.value.trim();
+                localStorage.setItem('cliente', nombre);
+            }
 
-        if (!formInicio.checkValidity()) {
+            window.location.href = './pages/productos.html';
+        });
+    }
 
-            formInicio.classList.add('was-validated');
-
-            return;
-        }
-
-        const nombre =
-            document.getElementById('nombre-usuario')
-            .value
-            .trim();
-
-        localStorage.setItem('cliente', nombre);
-
-        window.location.href = './pages/productos.html';
+    const botonesAdmin = document.querySelectorAll('.btn-admin');
+    
+    botonesAdmin.forEach(btn => {
+        btn.addEventListener('click', () => {
+            window.location.href = './pages/admin/login.html';
+        });
     });
-}
 
+});
