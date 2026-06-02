@@ -43,7 +43,9 @@ function renderizarProductos(filtro = "", categoria = "Todos", orden = "") {
             <td>${renderBadgeEstado(producto.activo)}</td>
             <td>
                 <button class="btn btn-warning btn-sm" onclick="editarProducto(${producto.id})">Editar</button>
-                <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${producto.id})">Eliminar</button>
+                <button class="btn btn-${producto.activo ? 'danger' : 'success'} btn-sm" onclick="cambiarEstado(${producto.id})">
+                    ${producto.activo ? 'Desactivar' : 'Activar'}
+                </button>
             </td>
         </tr>
     `).join('');
@@ -76,32 +78,40 @@ function cerrarSesion() {
 
 window.editarProducto = editarProducto;
 
-window.eliminarProducto = function(id) {
+window.cambiarEstado = function(id) {
+    const producto = productos.find(p => p.id === id);
+    if (!producto) return;
+
     Swal.fire({
-        title: '¿Eliminar producto?',
-        icon: 'warning',
+        title: producto.activo ? "¿Desactivar producto?" : "¿Activar producto?",
+        text: producto.activo ? "El producto dejará de verse en la tienda." : "El producto volverá a verse en la tienda.",
+        icon: "question",
         showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar"
     }).then((result) => {
         if (result.isConfirmed) {
-            productos = productos.filter(p => p.id !== id);
+            producto.activo = !producto.activo;
 
             localStorage.setItem("productosAdmin", JSON.stringify(productos));
-            
-            const buscador = document.getElementById("buscar-producto");
-            const filtroCategoria = document.getElementById("filtro-categoria");
-            const ordenarProductos = document.getElementById("ordenar-productos");
 
-            renderizarProductos(
-                buscador?.value || "",
-                filtroCategoria?.value || "Todos",
-                ordenarProductos?.value || ""
-            );
-            renderizarEstadisticas(); 
+            const busqueda = document.getElementById("buscar-producto")?.value || "";
+            const categoria = document.getElementById("filtro-categoria")?.value || "Todos";
+            const orden = document.getElementById("ordenar-productos")?.value || "";
+
+            renderizarProductos(busqueda, categoria, orden);
+            renderizarEstadisticas();
+
+            Swal.fire({
+                icon: "success",
+                title: producto.activo ? "Producto activado" : "Producto desactivado",
+                timer: 1200,
+                showConfirmButton: false
+            });
         }
     });
 };
+
 
 function renderizarVentas() {
     const ventas = JSON.parse(localStorage.getItem("historialVentas")) || [];

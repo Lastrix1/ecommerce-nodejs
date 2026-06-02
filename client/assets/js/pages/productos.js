@@ -2,6 +2,10 @@
 let productosData = [];
 let carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
 
+let paginaActual = 1;
+
+const productosPorPagina = 8;
+
 document.addEventListener('DOMContentLoaded', () => {
     cargarProductos();
     
@@ -27,11 +31,13 @@ window.renderizarTienda = function (categoria) {
     const contenedor = document.getElementById('lista-productos');
     if (!contenedor) return;
 
+    // 1. Filtrar los productos por categoría y estado activo
     const filtrados = productosData.filter(p => {
         const coincideCategoria = (categoria === 'Todos' || p.categoria === categoria);
         return coincideCategoria && p.activo;
     });
 
+    // Si no hay productos, mostrar el cartel de alerta
     if (filtrados.length === 0) {
         contenedor.innerHTML = `
             <div class="col-12 text-center p-5">
@@ -40,7 +46,13 @@ window.renderizarTienda = function (categoria) {
         return;
     }
 
-    contenedor.innerHTML = filtrados.map(p => `
+    // 2. Lógica de Paginación (Acomodada en su lugar correcto)
+    const inicio = (paginaActual - 1) * productosPorPagina;
+    const fin = inicio + productosPorPagina;
+    const productosPagina = filtrados.slice(inicio, fin);
+
+    // 3. Renderizar las tarjetas de los productos de la página actual
+    contenedor.innerHTML = productosPagina.map(p => `
         <div class="col">
             <div class="card h-100 tarjeta-producto shadow-sm">
                 <div id="carouselProd${p.id}" class="carousel slide" data-bs-ride="false">
@@ -69,6 +81,42 @@ window.renderizarTienda = function (categoria) {
             </div>
         </div>
     `).join('');
+
+    // 4. Dibujar la botonera de paginación
+    renderizarPaginacion(filtrados.length, categoria);
+};
+
+function renderizarPaginacion(totalProductos, categoria) {
+    const contenedor = document.getElementById("paginacion-tienda");
+    if (!contenedor) return;
+
+    const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
+    contenedor.innerHTML = "";
+
+    if (totalPaginas <= 1) return;
+
+    const esPrimero = paginaActual === 1;
+    const claseAnterior = esPrimero ? "btn-paginacion-deshabilitado" : "btn-paginacion-flecha";
+
+    contenedor.innerHTML += `
+        <button class="${claseAnterior}" ${esPrimero ? "disabled" : ""} onclick="irPagina(${paginaActual - 1}, '${categoria}')">
+            <i class="bi bi-chevron-left me-1"></i> Anterior
+        </button>
+    `;
+
+    const esUltimo = paginaActual === totalPaginas;
+    const claseSiguiente = esUltimo ? "btn-paginacion-deshabilitado" : "btn-paginacion-flecha";
+
+    contenedor.innerHTML += `
+        <button class="${claseSiguiente}" ${esUltimo ? "disabled" : ""} onclick="irPagina(${paginaActual + 1}, '${categoria}')">
+            Siguiente <i class="bi bi-chevron-right ms-1"></i>
+        </button>
+    `;
+}
+
+window.irPagina = function (pagina, categoria) {
+    paginaActual = pagina;
+    renderizarTienda(categoria);
 };
 
 window.agregar = function (id) {
@@ -79,12 +127,14 @@ window.agregar = function (id) {
     if (existe) {
         existe.cantidad++;
     } else {
-        carrito.push({ ...producto, quantity: 1, cantidad: 1 }); // Mantiene compatibilidad de esquemas
+        // Mantiene cantidad y quantity para no romper compatibilidades
+        carrito.push({ ...producto, quantity: 1, cantidad: 1 });
     }
 
     localStorage.setItem('carritoActual', JSON.stringify(carrito));
     actualizarContador();
 
+    // Notificación Toast flotante abajo a la derecha
     Swal.fire({
         title: '¡Añadido al carrito!',
         text: `${producto.nombre} se agregó al carrito`,

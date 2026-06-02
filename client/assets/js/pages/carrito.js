@@ -1,12 +1,16 @@
-
 let carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
 const cliente = localStorage.getItem('cliente') || "Consumidor Final";
 
 document.addEventListener('DOMContentLoaded', () => {
     renderizarResumen();
 
+    // Enlace del botón Confirmar Pedido
     const btnConfirmar = document.getElementById('btn-confirmar');
     if (btnConfirmar) btnConfirmar.onclick = finalizarCompra;
+
+    // 🛠️ ¡CONEXIÓN ARREGLADA!: Enlazamos el botón de vaciar del HTML
+    const btnVaciar = document.getElementById('btn-vaciar');
+    if (btnVaciar) btnVaciar.onclick = vaciarCarritoCompleto;
 });
 
 function renderizarResumen() {
@@ -43,7 +47,7 @@ function renderizarResumen() {
                     </div>
                     <div class="col-9 col-md-5">
                         <h5 class="mb-0 fw-bold">${p.nombre}</h5>
-                        <small class="text-secondary">Precio unitario: $${p.precio}</small>
+                        <small class="text-secondary">Precio unitario: $${p.precio.toLocaleString('es-AR')}</small>
                     </div>
                     <div class="col-12 col-md-5 d-flex align-items-center justify-content-md-end gap-2 mt-3 mt-md-0">
                         <button class="btn btn-sm btn-outline-secondary" onclick="actualizarCantidad(${p.id}, -1)">
@@ -61,7 +65,7 @@ function renderizarResumen() {
             </div>`;
     }).join('');
 
-    if (totalTxt) totalTxt.innerText = `$${totalAcumulado.toLocaleString()}`;
+    if (totalTxt) totalTxt.innerText = `$${totalAcumulado.toLocaleString('es-AR')}`;
     if (cantTxt) cantTxt.innerText = totalCant;
 }
 
@@ -86,7 +90,6 @@ window.actualizarCantidad = (id, cambio) => {
             });
         }
     }
-
     guardarYRefrescar();
 };
 
@@ -109,6 +112,28 @@ window.eliminarProducto = (id) => {
     guardarYRefrescar();
 };
 
+// 🛠️ Función renombrada y optimizada para el botón de Vaciar Completo
+window.vaciarCarritoCompleto = () => {
+    Swal.fire({
+        title: '¿Vaciar carrito?',
+        text: 'Todos los productos serán eliminados del pedido actual.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, vaciar',
+        cancelButtonText: 'No, continuar',
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#64748b',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('carritoActual');
+            localStorage.setItem('compraConfirmada', 'false');
+            carrito = [];
+            window.location.href = "./productos.html";
+        }
+    });
+};
+
 async function finalizarCompra() {
     if (carrito.length === 0) return;
 
@@ -116,12 +141,13 @@ async function finalizarCompra() {
 
     const result = await Swal.fire({
         title: '¿Confirmar Pedido?',
-        text: `El total de tu compra es $${total.toLocaleString()}`,
+        text: `El total de tu compra es $${total.toLocaleString('es-AR')}`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sí, finalizar',
         cancelButtonText: 'No, volver',
         confirmButtonColor: '#06b6d4',
+        cancelButtonColor: '#64748b',
         reverseButtons: true
     });
 
@@ -142,26 +168,6 @@ async function finalizarCompra() {
         window.location.href = './ticket.html';
     }
 }
-
-window.salir = () => {
-    Swal.fire({
-        title: '¿Vaciar carrito?',
-        text: 'Todos los productos serán eliminados del pedido actual.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, vaciar',
-        cancelButtonText: 'No, continuar',
-        confirmButtonColor: '#d33',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed){
-            localStorage.removeItem('carritoActual');
-            localStorage.setItem('compraConfirmada', 'false');
-            carrito = [];
-            window.location.href = "./productos.html";
-        }
-    });
-};
 
 function guardarYRefrescar() {
     localStorage.setItem('carritoActual', JSON.stringify(carrito));
