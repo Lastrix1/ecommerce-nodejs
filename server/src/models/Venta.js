@@ -7,20 +7,34 @@ const Venta = sequelize.define('Venta', {
         primaryKey: true,
         autoIncrement: true
     },
-    usuario: {
-        type: DataTypes.STRING(100),
-        allowNull: false // "Cliente / Comprador"
-    },
-    fecha: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW // Guarda fecha y hora automáticamente
-    },
     total: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
+    },
+    usuario_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW 
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW 
+    },
+    fecha: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.createdAt;
+        }
     }
 }, {
-    timestamps: false
+    tableName: 'ventas',
+    timestamps: true 
 });
 
 module.exports = Venta;

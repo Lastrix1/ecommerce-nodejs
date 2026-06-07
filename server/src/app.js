@@ -1,70 +1,54 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const app = express();
 
-// 1. IMPORTAR MODELOS
-const { sequelize, Producto, Venta, Usuario } = require('./models');
+const { sequelize } = require('./models');
 
-// 2. CONFIGURAR MOTOR DE PLANTILLAS (EJS)
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views')); 
 
-// 3. MIDDLEWARES GLOBALES
-app.use(express.urlencoded({ extended: false })); 
-app.use(express.json());                          
+app.use(cors());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-// 4. ARCHIVOS ESTÁTICOS
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/assets/img', express.static(path.join(__dirname, '..', 'public', 'images')));
 
-// 5. RUTAS
-const productosApiRoutes = require('./routes/api/productos.routes');
+const authRoutes = require('./routes/api/auth.routes');
+const productosRoutes = require('./routes/api/productos.routes'); 
+const ventasRoutes = require('./routes/api/ventas.routes');       
 
-// Express toma las rutas que empiecen con /api/productos
-app.use('/api/productos', productosApiRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/productos', productosRoutes); 
+app.use('/api/ventas', ventasRoutes);       
 
-app.get('/', (req, res) => {
-    res.send('Servidor Backend funcionando correctamente.');
-});
 
-// 6. CONEXIÓN A MYSQL Y ARRANQUE
 const PORT = process.env.PORT || 3000;
+console.log('🔄 Sincronizando base de datos con MySQL...');
 
-console.log('🔄 Intentando conectar con MySQL Workbench...');
+sequelize.sync({ force: false })
+    .then(() => {
+        console.log('✅ Base de datos MySQL conectada y sincronizada a la perfección.');
 
-sequelize.sync({ force: false }) 
-    .then(async () => {
-        console.log('✅ Base de datos MySQL conectada y sincronizada.');
-
-        try {
-            const conteoProductos = await Producto.count();
-            if (conteoProductos === 0) {
-                await Producto.bulkCreate([
-                    { nombre: 'Teclado Mecánico RGB', categoria: 'Perifericos', precio: 45000.00, stock: 15, imagen: 'teclado.jpg' },
-                    { nombre: 'Mouse Gamer 24000 DPI', categoria: 'Perifericos', precio: 25000.00, stock: 30, imagen: 'mouse.jpg' },
-                    { nombre: 'Procesador AMD Ryzen 5', categoria: 'Hardware', precio: 195000.00, stock: 8, imagen: 'ryzen5.jpg' },
-                    { nombre: 'Memoria RAM 16GB DDR4', categoria: 'Hardware', precio: 38000.00, stock: 20, imagen: 'ram.jpg' }
-                ]);
-                console.log('🌱 Productos de prueba cargados con éxito.');
-            }
-
-            const conteoUsuarios = await Usuario.count();
-            if (conteoUsuarios === 0) {
-                await Usuario.create({
-                    nombre: 'Admin Punto Tecno',
-                    email: 'admin@puntotecno.com',
-                    password: 'admin123',
-                    rol: 'admin'
-                });
-                console.log('🌱 Usuario administrador de prueba creado.');
-            }
-        } catch (errorSeed) {
-            console.error('⚠️ Advertencia al cargar datos iniciales:', errorSeed);
-        }
-
-        app.listen(PORT, () => {
+        const server = app.listen(PORT, () => {
             console.log(`🚀 Servidor corriendo en: http://localhost:${PORT}`);
+        });
+
+        server.on('error', (error) => {
+            console.error('❌ Error en el servidor:', error);
         });
     })
     .catch(err => {
         console.error('❌ Error crítico al conectar la base de datos:', err);
     });
+
+process.on('exit', (code) => {
+    console.log('⚠️ Node se está cerrando con código:', code);
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('❌ Error no capturado:', error);
+});
+
+process.on('unhandledRejection', (error) => {
+    console.error('❌ Promesa rechazada:', error);
+});

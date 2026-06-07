@@ -1,80 +1,85 @@
-
 document.addEventListener("DOMContentLoaded", () => {
-    
-    const adminLogueado = localStorage.getItem("adminLogueado");
-    if (adminLogueado !== "true") {
-        window.location.href = "./login.html";
-        return; 
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const idEditar = params.get("id");
-
     const form = document.getElementById("form-producto");
-    if (!form) return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const productoId = urlParams.get("id"); 
 
-    let productos = JSON.parse(localStorage.getItem("productosAdmin")) || [];
-
-    if (idEditar) {
-        const producto = productos.find(p => p.id == idEditar);
-
-        if (producto) {
-            establecerValorInput("nombre", producto.nombre);
-            establecerValorInput("precio", producto.precio);
-            establecerValorInput("imagen", producto.imagen);
-            establecerValorInput("categoria", producto.categoria);
-            establecerValorInput("stock", producto.stock);
-            
-            const inputActivo = document.getElementById("activo");
-            if (inputActivo) inputActivo.checked = producto.activo;
-        }
+    if (productoId && productoId !== "null" && productoId !== "undefined") {
+        fetch(`http://localhost:3000/api/productos/${productoId}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`El producto con ID ${productoId} no existe.`);
+                }
+                return res.json();
+            })
+            .then(producto => {
+                document.getElementById("nombre").value = producto.nombre || "";
+                document.getElementById("precio").value = producto.precio || "";
+                document.getElementById("stock").value = producto.stock || "";
+                document.getElementById("imagen").value = producto.imagen || "";
+                document.getElementById("categoria").value = producto.categoria || "";
+                document.getElementById("activo").checked = producto.activo == 1 || producto.activo == true;
+            })
+            .catch(err => {
+                console.error("Error al cargar ficha de producto:", err);
+                Swal.fire({
+                    icon: "error",
+                    title: "Producto no encontrado",
+                    text: "El artículo que intentás editar no existe."
+                }).then(() => {
+                    window.location.href = "./dashboard.html";
+                });
+            });
     }
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        productos = JSON.parse(localStorage.getItem("productosAdmin")) || [];
-
-        const nuevoProducto = {
-            id: idEditar ? Number(idEditar) : Date.now(),
-            nombre: document.getElementById("nombre")?.value || "",
-            precio: Number(document.getElementById("precio")?.value || 0),
-            imagen: document.getElementById("imagen")?.value || "",
-            categoria: document.getElementById("categoria")?.value || "",
-            activo: document.getElementById("activo")?.checked || false,
-            stock: Number(document.getElementById("stock")?.value || 0)
+        const productoData = {
+            nombre: document.getElementById("nombre").value.trim(),
+            precio: parseFloat(document.getElementById("precio").value),
+            stock: parseInt(document.getElementById("stock").value),
+            imagen: document.getElementById("imagen").value.trim() || "favicon.png",
+            categoria: document.getElementById("categoria").value,
+            activo: document.getElementById("activo").checked ? 1 : 0
         };
 
-        if (idEditar) {
-            const indice = productos.findIndex(p => p.id == idEditar);
-            if (indice !== -1) {
-                productos[indice] = nuevoProducto;
+        try {
+            let url = "http://localhost:3000/api/productos";
+            let metodo = "POST"; 
+
+            if (productoId && productoId !== "null" && productoId !== "undefined") {
+                url = `http://localhost:3000/api/productos/${productoId}`;
+                metodo = "PUT"; 
             }
-        } else {
-            productos.push(nuevoProducto);
+
+            const respuesta = await fetch(url, {
+                method: metodo,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(productoData)
+            });
+
+            if (!respuesta.ok) throw new Error("Error en la operación del servidor");
+
+            await Swal.fire({
+                icon: "success",
+                title: productoId ? "Producto actualizado" : "Producto guardado con éxito",
+                text: "Los cambios impactaron en la base de datos.",
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+            window.location.href = "./dashboard.html";
+
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error de guardado",
+                text: "No se pudo sincronizar el cambio con el backend."
+            });
         }
-
-        localStorage.setItem("productosAdmin", JSON.stringify(productos));
-
-        Swal.fire({
-            icon: "success",
-            title: idEditar ? "Producto actualizado" : "Producto creado",
-            text: idEditar 
-                ? "Los cambios fueron guardados correctamente." 
-                : "El producto fue agregado correctamente.",
-            confirmButtonColor: "#06b6d4",
-            timer: 1500,
-            showConfirmButton: false,
-            willClose: () => {
-                window.location.href = "./dashboard.html";
-            }
-        });
     });
 });
 
-function establecerValorInput(idElemento, valor) {
-    const elemento = document.getElementById(idElemento);
-    if (elemento) {
-        elemento.value = valor;
-    }
+if (localStorage.getItem("adminLogueado") !== "true") {
+    window.location.href = "./login.html";
 }

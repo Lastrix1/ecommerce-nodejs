@@ -33,38 +33,44 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await respuesta.json();
 
             if (!respuesta.ok) {
+
                 throw new Error(
                     data.error ||
                     "Credenciales incorrectas."
                 );
             }
 
-            if (data.usuario.rol !== "admin") {
-
-                throw new Error(
-                    "Este usuario no tiene permisos de administrador."
-                );
-
-            }
-
             localStorage.setItem(
-                "adminLogueado",
-                "true"
+                "usuarioId",
+                data.usuario.id
             );
 
             localStorage.setItem(
-                "adminNombre",
+                "cliente",
                 data.usuario.nombre
             );
 
+            localStorage.setItem(
+                "usuarioLogueado",
+                "true"
+            );
+
+            await Swal.fire({
+                icon: "success",
+                title: "Bienvenido",
+                text: data.usuario.nombre,
+                timer: 1500,
+                showConfirmButton: false
+            });
+
             window.location.href =
-                "./dashboard.html";
+                "./productos.html";
 
         } catch (error) {
 
             Swal.fire({
                 icon: "error",
-                title: "Acceso denegado",
+                title: "Error de acceso",
                 text: error.message
             });
 

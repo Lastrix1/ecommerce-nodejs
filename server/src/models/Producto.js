@@ -8,12 +8,12 @@ const Producto = sequelize.define('Producto', {
         autoIncrement: true
     },
     nombre: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING,
         allowNull: false
     },
     categoria: {
-        type: DataTypes.STRING(50),
-        allowNull: false // Hardware o Perifericos
+        type: DataTypes.STRING,
+        allowNull: false
     },
     precio: {
         type: DataTypes.DECIMAL(10, 2),
@@ -21,18 +21,20 @@ const Producto = sequelize.define('Producto', {
     },
     stock: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         defaultValue: 0
     },
     imagen: {
-        type: DataTypes.STRING(255),
-        allowNull: true // Guarda el nombre del archivo de la foto
+        type: DataTypes.STRING,
+        defaultValue: 'favicon.png'
     },
     activo: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true // Activo por defecto 
+        defaultValue: true 
     }
 }, {
-    timestamps: false // Evita que Sequelize cree las columnas automáticas createdAt y updatedAt
+    tableName: 'productos',
+    timestamps: false
 });
 
 module.exports = Producto;

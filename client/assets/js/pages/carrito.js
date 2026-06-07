@@ -1,14 +1,12 @@
 let carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
-const cliente = localStorage.getItem('cliente') || "Consumidor Final";
+const cliente = localStorage.getItem('cliente');
 
 document.addEventListener('DOMContentLoaded', () => {
     renderizarResumen();
 
-    // Enlace del botón Confirmar Pedido
     const btnConfirmar = document.getElementById('btn-confirmar');
     if (btnConfirmar) btnConfirmar.onclick = finalizarCompra;
 
-    // 🛠️ ¡CONEXIÓN ARREGLADA!: Enlazamos el botón de vaciar del HTML
     const btnVaciar = document.getElementById('btn-vaciar');
     if (btnVaciar) btnVaciar.onclick = vaciarCarritoCompleto;
 });
@@ -40,24 +38,24 @@ function renderizarResumen() {
         totalCant += p.cantidad;
 
         return `
-            <div class="card card-carrito shadow-sm p-3 mb-3">
+            <div class="card card-carrito shadow-sm p-3 mb-3 border-0 rounded-4">
                 <div class="row align-items-center">
                     <div class="col-3 col-md-2">
                         <img src="${p.imagen}" class="item-carrito-img img-fluid rounded" alt="${p.nombre}">
                     </div>
                     <div class="col-9 col-md-5">
                         <h5 class="mb-0 fw-bold">${p.nombre}</h5>
-                        <small class="text-secondary">Precio unitario: $${p.precio.toLocaleString('es-AR')}</small>
+                        <small class="text-secondary">Precio unitario: $${parseFloat(p.precio).toLocaleString('es-AR')}</small>
                     </div>
                     <div class="col-12 col-md-5 d-flex align-items-center justify-content-md-end gap-2 mt-3 mt-md-0">
-                        <button class="btn btn-sm btn-outline-secondary" onclick="actualizarCantidad(${p.id}, -1)">
+                        <button class="btn btn-sm btn-outline-secondary rounded-circle" onclick="actualizarCantidad(${p.id}, -1)">
                             <i class="bi bi-dash"></i>
                         </button>
                         <span class="fw-bold px-2">${p.cantidad}</span>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="actualizarCantidad(${p.id}, 1)">
+                        <button class="btn btn-sm btn-outline-secondary rounded-circle" onclick="actualizarCantidad(${p.id}, 1)">
                             <i class="bi bi-plus"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger ms-3" onclick="eliminarProducto(${p.id})">
+                        <button class="btn btn-sm btn-outline-danger ms-3 rounded-pill" onclick="eliminarProducto(${p.id})">
                             <i class="bi bi-trash"></i> Borrar
                         </button>
                     </div>
@@ -66,7 +64,7 @@ function renderizarResumen() {
     }).join('');
 
     if (totalTxt) totalTxt.innerText = `$${totalAcumulado.toLocaleString('es-AR')}`;
-    if (cantTxt) cantTxt.innerText = totalCant;
+    if (cantTxt) cantTxt.innerText = totalCant; 
 }
 
 window.actualizarCantidad = (id, cambio) => {
@@ -112,7 +110,6 @@ window.eliminarProducto = (id) => {
     guardarYRefrescar();
 };
 
-// 🛠️ Función renombrada y optimizada para el botón de Vaciar Completo
 window.vaciarCarritoCompleto = () => {
     Swal.fire({
         title: '¿Vaciar carrito?',
@@ -152,20 +149,61 @@ async function finalizarCompra() {
     });
 
     if (result.isConfirmed) {
-        localStorage.setItem('compraConfirmada', 'true');
+        Swal.fire({
+            title: 'Procesando tu pedido...',
+            text: 'Estamos registrando la venta en nuestro sistema.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
-        const nuevaVenta = {
-            usuario: cliente,
-            fecha: new Date().toLocaleString(),
-            total: total,
-            productos: carrito
-        };
+        try {
+            const datosVenta = {
+                usuario_id: localStorage.getItem('usuarioId'),
+                usuario: localStorage.getItem('cliente') || "Consumidor Final",
+                total: total,
+                productos: carrito.map(p => ({
+                    id: p.id,
+                    cantidad: p.cantidad,
+                    precio: p.precio
+                }))
+            };
 
-        const historial = JSON.parse(localStorage.getItem('historialVentas')) || [];
-        historial.push(nuevaVenta);
-        localStorage.setItem('historialVentas', JSON.stringify(historial));
+            const respuesta = await fetch('http://localhost:3000/api/ventas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datosVenta)
+            });
 
-        window.location.href = './ticket.html';
+            const resultadoAPI = await respuesta.json();
+
+            if (!respuesta.ok) {
+                throw new Error(resultadoAPI.error || 'Error al procesar la venta.');
+            }
+
+            localStorage.setItem('compraConfirmada', 'true');
+            localStorage.setItem('ultimaVentaId', resultadoAPI.ventaId); 
+
+            localStorage.setItem('carritoTicket', JSON.stringify(carrito));
+            localStorage.setItem('clienteTicket', localStorage.getItem('cliente') || "Consumidor Final");
+
+            localStorage.removeItem('carritoActual');
+            carrito = [];
+
+            window.location.href = './ticket.html';
+
+        } catch (error) {
+            console.error('Error al procesar la venta:', error);
+            Swal.fire({
+                title: 'Error al finalizar la compra',
+                text: error.message || 'No se pudo conectar con el servidor.',
+                icon: 'error',
+                confirmButtonColor: '#ef4444'
+            });
+        }
     }
 }
 

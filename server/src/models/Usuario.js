@@ -15,9 +15,7 @@ const Usuario = sequelize.define('Usuario', {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        validate: {
-            isEmail: true
-        }
+        validate: { isEmail: true }
     },
     password: {
         type: DataTypes.STRING,
@@ -25,11 +23,21 @@ const Usuario = sequelize.define('Usuario', {
     },
     rol: {
         type: DataTypes.STRING,
-        defaultValue: 'client' // Puede ser 'admin' o 'client'
+        defaultValue: 'client'
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW 
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW 
     }
 }, {
-    tableName: 'usuarios', // Fuerza a que la tabla en MySQL se llame exactamente así
-    timestamps: true       // Crea automáticamente las columnas de cuándo se creó y actualizó el usuario
+    tableName: 'usuarios',
+    timestamps: true
 });
 
 module.exports = Usuario;
