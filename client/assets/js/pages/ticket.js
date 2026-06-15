@@ -1,26 +1,23 @@
-/* -------------------------------------------------------------------------- */
-/* 1. CONFIGURACIÓN E INICIALIZACIÓN DE LA VISTA                              */
-/* -------------------------------------------------------------------------- */
+const carrito = JSON.parse(localStorage.getItem('carritoTicket')) || [];
+const cliente = localStorage.getItem('clienteTicket') || localStorage.getItem('cliente') || "Consumidor Final";
 
-const carrito = JSON.parse(localStorage.getItem('carritoActual')) || [];
-const cliente = localStorage.getItem('cliente') || "Consumidor Final";
-
-// Asignación segura del botón salir fuera del DOMContentLoaded por si carga rápido
 const btnSalir = document.getElementById('btn-salir');
 if (btnSalir) {
     btnSalir.onclick = salir;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const usuarioId = localStorage.getItem('usuarioId');
+    if (!usuarioId) {
+        window.location.href = './login-cliente.html';
+    }
+
     mostrarResumenEnPantalla();
 
     const btnDescargar = document.getElementById('btn-descargar');
     if (btnDescargar) btnDescargar.onclick = generarPDF;
 });
-
-/* -------------------------------------------------------------------------- */
-/* 2. RENDERIZADO INTERNO (HTML INTERFAZ)                                     */
-/* -------------------------------------------------------------------------- */
 
 function mostrarResumenEnPantalla() {
     const contenedor = document.getElementById('detalle-ticket');
@@ -41,7 +38,6 @@ function mostrarResumenEnPantalla() {
 
     let total = 0;
     
-    // Inyección optimizada por bloques concatenados
     let html = `
         <div class="border-bottom border-secondary border-opacity-25 pb-3 mb-3">
             <h5 class="fw-bold text-uppercase mb-1">Comprobante No Válido como Factura</h5>
@@ -69,10 +65,6 @@ function mostrarResumenEnPantalla() {
     contenedor.innerHTML = html;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3. GENERACIÓN DINÁMICA DE DOCUMENTO PDF                                    */
-/* -------------------------------------------------------------------------- */
-
 async function generarPDF() {
     if (carrito.length === 0) return;
 
@@ -80,30 +72,24 @@ async function generarPDF() {
         const { PDFDocument, StandardFonts, rgb } = PDFLib;
         const pdfDoc = await PDFDocument.create();
         
-        // 🟢 OPTIMIZACIÓN: Cálculo de altura dinámica para prevenir desbordes
         const alturaBase = 250; 
         const espacioPorProducto = 25;
         const alturaCalculada = alturaBase + (carrito.length * espacioPorProducto);
         
-        // Creamos la página adaptada a la cantidad de ítems comprados
         const page = pdfDoc.addPage([420, alturaCalculada]);
         
         const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
         const fontNormal = await pdfDoc.embedFont(StandardFonts.Helvetica);
         
-        // 🟢 SOLUCIÓN: Reemplazo seguro de la función 'esOscuro()'
         const esOscuro = document.documentElement.getAttribute('data-bs-theme') === 'dark';
 
-        // Procesamiento e incrustación de recursos de imagen
-        const logoUrl = '../assets/img/favicon.png'; 
+        const logoUrl = 'http://localhost:3000/assets/img/favicon.png';
         const logoBytes = await fetch(logoUrl).then(res => res.arrayBuffer());
         const logoImage = await pdfDoc.embedPng(logoBytes);
         const logoDims = logoImage.scale(0.4);
 
-        // Coordenada inicial superior basada en la altura resultante
         let y = alturaCalculada - 50;
 
-        // Renderizado del encabezado corporativo
         page.drawImage(logoImage, { x: 40, y: y - 5, width: logoDims.width, height: logoDims.height });
         page.drawText("PUNTO TECNO S.A.", { x: 80, y, size: 20, font: fontBold, color: rgb(0.02, 0.45, 0.88) });
         
@@ -116,7 +102,6 @@ async function generarPDF() {
         page.drawLine({ start: { x: 40, y }, end: { x: 380, y }, thickness: 1, opacity: 0.2 });
         y -= 25;
 
-        // Renderizado iterativo de productos comprados
         carrito.forEach(p => {
             const itemTexto = `${p.cantidad}x  ${p.nombre.substring(0, 32)}`;
             const precioTexto = `$${(p.precio * p.cantidad).toLocaleString('es-AR')}`;
@@ -130,12 +115,10 @@ async function generarPDF() {
         page.drawLine({ start: { x: 40, y }, end: { x: 380, y }, thickness: 1.5, opacity: 0.7 });
         y -= 25;
 
-        // Sección final de Cierre y Liquidación
         const totalFinal = carrito.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
         page.drawText("TOTAL LIQUIDADO:", { x: 40, y, size: 14, font: fontBold });
         page.drawText(`$${totalFinal.toLocaleString('es-AR')}`, { x: 290, y, size: 14, font: fontBold, color: rgb(0.02, 0.45, 0.88) });
 
-        // Compresión y descarga del Blob binario
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const link = document.createElement('a');
@@ -143,7 +126,6 @@ async function generarPDF() {
         link.download = `Ticket_PuntoTecno_${Date.now()}.pdf`;
         link.click();
 
-        // Lanzamiento del Toast integrado con la interfaz actual
         setTimeout(() => {
             Swal.fire({
                 title: '¡PDF descargado!',
@@ -165,6 +147,10 @@ async function generarPDF() {
 
 function salir() {
     localStorage.removeItem('carritoActual');
+    localStorage.removeItem('carritoTicket');
+    localStorage.removeItem('clienteTicket');
+    localStorage.removeItem('ultimaVentaId');
+    
     Swal.fire({
         title: '¡Muchas gracias por tu compra!',
         text: 'Regresando a la pantalla de bienvenida...',

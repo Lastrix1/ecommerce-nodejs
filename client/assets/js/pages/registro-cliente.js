@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const form = document.getElementById("login-form");
+    const form = document.getElementById("registro-form");
 
     if (!form) return;
 
@@ -8,22 +8,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
         e.preventDefault();
 
+        const nombre =
+            document.getElementById("nombre").value.trim();
+
+        const apellido =
+            document.getElementById("apellido").value.trim();
+
         const email =
             document.getElementById("email").value.trim();
 
         const password =
             document.getElementById("password").value;
 
+        const confirmPassword =
+            document.getElementById("confirm-password").value;
+
+        if (password !== confirmPassword) {
+
+            Swal.fire({
+                icon: "error",
+                title: "Contraseñas diferentes",
+                text: "Las contraseñas deben coincidir."
+            });
+
+            return;
+        }
+
         try {
 
             const respuesta = await fetch(
-                "http://localhost:3000/api/auth/login",
+                "http://localhost:3000/api/auth/registro",
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
+                        nombre: `${nombre} ${apellido}`,
                         email,
                         password
                     })
@@ -35,36 +56,24 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!respuesta.ok) {
                 throw new Error(
                     data.error ||
-                    "Credenciales incorrectas."
+                    "No fue posible registrar el usuario."
                 );
             }
 
-            if (data.usuario.rol !== "admin") {
-
-                throw new Error(
-                    "Este usuario no tiene permisos de administrador."
-                );
-
-            }
-
-            localStorage.setItem(
-                "adminLogueado",
-                "true"
-            );
-
-            localStorage.setItem(
-                "adminNombre",
-                data.usuario.nombre
-            );
+            await Swal.fire({
+                icon: "success",
+                title: "Registro exitoso",
+                text: "Ahora puedes iniciar sesión."
+            });
 
             window.location.href =
-                "./dashboard.html";
+                "./login-cliente.html";
 
         } catch (error) {
 
             Swal.fire({
                 icon: "error",
-                title: "Acceso denegado",
+                title: "Error",
                 text: error.message
             });
 
