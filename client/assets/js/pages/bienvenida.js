@@ -1,16 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const botonesAdmin =
-        document.querySelectorAll(".btn-admin");
+    const form = document.getElementById("form-bienvenida");
 
-    botonesAdmin.forEach(btn => {
-
-        btn.addEventListener("click", () => {
-
-            window.location.href =
-                "./pages/admin/login.html";
+    if (form) {
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById("nombre-cliente").value.trim();
+            if (!nombre) return;
+            localStorage.setItem("cliente", nombre);
+            window.location.href = "./pages/productos.html";
         });
-
-    });
+    }
 
 });

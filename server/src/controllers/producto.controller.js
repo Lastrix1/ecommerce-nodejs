@@ -41,7 +41,7 @@ const productoController = {
                 categoria: categoria || 'Hardware',
                 precio: parseFloat(precio),
                 stock: parseInt(stock) || 0,
-                imagen: imagen || 'default.jpg',
+                imagen: req.file ? req.file.filename : (imagen || 'favicon.png'),
                 activo: activo === undefined ? 1 : activo
             });
 
@@ -84,7 +84,7 @@ const productoController = {
                 categoria: req.body.categoria !== undefined ? req.body.categoria : producto.categoria,
                 precio: req.body.precio !== undefined ? parseFloat(req.body.precio) : producto.precio,
                 stock: req.body.stock !== undefined ? parseInt(req.body.stock) : producto.stock,
-                imagen: req.body.imagen !== undefined ? req.body.imagen : producto.imagen,
+                imagen: req.file ? req.file.filename : (req.body.imagen !== undefined ? req.body.imagen : producto.imagen),
                 activo: req.body.activo !== undefined ? req.body.activo : producto.activo
             });
 

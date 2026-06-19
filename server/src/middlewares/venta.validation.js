@@ -2,8 +2,14 @@ const { body, validationResult } = require('express-validator');
 
 const validarVenta = [
     body('usuario_id')
+        .optional({ nillable: true })
         .isInt({ min: 1 })
-        .withMessage('El usuario es obligatorio y debe ser válido'),
+        .withMessage('El usuario_id debe ser válido'),
+
+    body('nombre_cliente')
+        .optional()
+        .isString()
+        .withMessage('El nombre del cliente debe ser texto'),
 
     body('total')
         .isNumeric()

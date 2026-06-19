@@ -8,9 +8,9 @@ if (btnSalir) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const usuarioId = localStorage.getItem('usuarioId');
-    if (!usuarioId) {
-        window.location.href = './login-cliente.html';
+    const nombreCliente = localStorage.getItem('cliente');
+    if (!nombreCliente) {
+        window.location.href = './index.html';
     }
 
     mostrarResumenEnPantalla();

@@ -39,5 +39,45 @@ const validateProducto = [
         next();
     }
 ];
+const validateActualizarProducto = [ 
+    body('nombre')
+        .optional()
+        .notEmpty()
+        .withMessage('El nombre es obligatorio'),
+    body('categoria')
+        .optional()
+        .notEmpty()
+        .withMessage('La categoría es obligatoria'),
+    body('precio')
+        .optional()
+        .isNumeric()
+        .withMessage('El precio debe ser un número'),
+    body('stock')
+        .optional()
+        .isInt({ min: 0 })
+        .withMessage('El stock debe ser un número entero mayor o igual a 0'),
+    body('activo')
+        .optional()
+        .isBoolean(),
+    body('imagen')
+        .optional()
+        .notEmpty()
+        .withMessage('La imagen no puede estar vacía'),
+    
+        (req, res, next) => {
+        const errors = validationResult(req);
 
-module.exports = validateProducto;
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+
+        next();}
+
+
+
+];
+
+
+module.exports = { validateProducto, validateActualizarProducto };

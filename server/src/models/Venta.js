@@ -13,7 +13,7 @@ const Venta = sequelize.define('Venta', {
     },
     usuario_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
 
     createdAt: {
@@ -31,6 +31,10 @@ const Venta = sequelize.define('Venta', {
         get() {
             return this.createdAt;
         }
+    },
+    nombreCliente: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 }, {
     tableName: 'ventas',

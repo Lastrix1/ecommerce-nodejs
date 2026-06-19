@@ -160,8 +160,7 @@ async function finalizarCompra() {
 
         try {
             const datosVenta = {
-                usuario_id: localStorage.getItem('usuarioId'),
-                usuario: localStorage.getItem('cliente') || "Consumidor Final",
+                nombre_cliente: localStorage.getItem('cliente') || "Consumidor Final",
                 total: total,
                 productos: carrito.map(p => ({
                     id: p.id,

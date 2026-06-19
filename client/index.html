@@ -55,15 +55,18 @@
                     </div>
                     
                     <h1 class="h3 mb-2 fw-bold text-secondary-emphasis">¡Bienvenido!</h1>
-                    <p class="text-muted mb-4 small">Ingresar o registrarse para poder comenzar a explorar nuestro catálogo de productos.</p>
-                    
-                    <div class="mb-4 text-start">
-                        <a href="./pages/login-cliente.html" class="btn btn-primary w-100 py-2 fw-bold rounded-pill shadow-sm">
-                        Iniciar Sesión <i class="bi bi-box-arrow-in-right ms-1"></i></a>
-                        <a href="./pages/registro-cliente.html" class="btn btn-outline-primary w-100 py-2 mt-3 fw-bold rounded-pill shadow-sm">
-                        Registrarse <i class="bi bi-person-plus ms-1"></i></a>    
-                    </div>                        
-                </div>
+                    <p class="text-muted mb-4 small">Ingresá tu nombre para comenzar a comprar.</p>
+
+                    <form id="form-bienvenida">
+                        <div class="mb-3 text-start">
+                            <label for="nombre-cliente" class="form-label fw-medium">Tu nombre</label>
+                            <input type="text" id="nombre-cliente" class="form-control rounded-pill px-3" placeholder="Ej: Juan" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-pill shadow-sm">
+                            Continuar <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </form>
+                </div>  
             </div>
         </div>
     </main>

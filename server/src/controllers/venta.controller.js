@@ -2,12 +2,13 @@ const db = require('../models');
 
 const ventaController = {
     crearVenta: async (req, res) => {
-        const { usuario_id, total, productos } = req.body;
+        const { usuario_id,nombre_cliente, total, productos } = req.body;
         const t = await db.sequelize.transaction();
 
         try {
             const venta = await db.Venta.create({
-                usuario_id: parseInt(usuario_id),
+                usuario_id: usuario_id ? parseInt(usuario_id): null,
+                nombre_cliente: nombre_cliente || "consumidor final",
                 total: parseFloat(total)
             }, { transaction: t });
 
@@ -73,7 +74,7 @@ const ventaController = {
                     id: ventaJson.id,
                     total: ventaJson.total,
                     createdAt: ventaJson.createdAt || ventaJson.fecha,
-                    cliente: ventaJson.usuario ? ventaJson.usuario.nombre : 'Consumidor Final',
+                    cliente: ventaJson.nombre_cliente || (ventaJson.usuario ? ventaJson.usuario.nombre : 'Consumidor Final'),
                     productos: ventaJson.Productos ? ventaJson.Productos.map(p => {
                         const pivot = p.Venta_Productos || p.venta_productos || {};
                         return {

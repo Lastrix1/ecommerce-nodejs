@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("nombre").value = producto.nombre || "";
                 document.getElementById("precio").value = producto.precio || "";
                 document.getElementById("stock").value = producto.stock || "";
-                document.getElementById("imagen").value = producto.imagen || "";
+
                 document.getElementById("categoria").value = producto.categoria || "";
                 document.getElementById("activo").checked = producto.activo == 1 || producto.activo == true;
             })
@@ -34,14 +34,17 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const productoData = {
-            nombre: document.getElementById("nombre").value.trim(),
-            precio: parseFloat(document.getElementById("precio").value),
-            stock: parseInt(document.getElementById("stock").value),
-            imagen: document.getElementById("imagen").value.trim() || "favicon.png",
-            categoria: document.getElementById("categoria").value,
-            activo: document.getElementById("activo").checked ? 1 : 0
-        };
+        const formData = new FormData();
+        formData.append("nombre", document.getElementById("nombre").value.trim());
+        formData.append("precio", parseFloat(document.getElementById("precio").value));
+        formData.append("stock", parseInt(document.getElementById("stock").value));
+        formData.append("categoria", document.getElementById("categoria").value);
+        formData.append("activo", document.getElementById("activo").checked ? 1 : 0);
+
+        const imagenInput = document.getElementById("imagen");
+        if (imagenInput.files[0]) {
+        formData.append("imagen", imagenInput.files[0]);
+        }
 
         try {
             let url = "http://localhost:3000/api/productos";
@@ -54,8 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const respuesta = await fetch(url, {
                 method: metodo,
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(productoData)
+                body: formData
             });
 
             if (!respuesta.ok) throw new Error("Error en la operación del servidor");

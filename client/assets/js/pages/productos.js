@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const nombreUsuario = localStorage.getItem("cliente");
     const usuarioId = localStorage.getItem('usuarioId');
 
-    if (!usuarioId) {
-        window.location.href = './login-cliente.html';
+   if (!nombreUsuario) {
+        window.location.href = '../index.html';
         return;
-    }
+     }
 
     const spanUsuario = document.getElementById("usuario-logueado");
     const btnLogout = document.getElementById("btn-logout");
@@ -26,9 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnLogout.classList.remove("d-none");
     }
 
-    if (linkMisCompras) {
-        linkMisCompras.classList.remove("d-none");
-    }
+ 
 
     document.getElementById('btn-anterior').addEventListener('click', () => {
         if (paginaActual > 1) {
@@ -113,9 +111,12 @@ window.renderizarTienda = function (categoria = "Todos") {
     if (!contenedor) return;
 
     if (productosData.length === 0) {
-        console.log("Memoria vacía por refresco, re-sincronizando con MySQL...");
-        cargarProductosDesdeAPI(paginaActual, categoria);
-        return; 
+        contenedor.innerHTML = `
+            <div class="col-12 text-center p-5">
+                <p class="alert alert-info d-inline-block px-5">No hay productos disponibles.</p>
+            </div>`;
+        actualizarBotones(0);
+        return;
     }
 
     if (categoria !== categoriaActual) {
