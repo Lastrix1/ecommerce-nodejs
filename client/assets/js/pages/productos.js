@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnLogout.classList.remove("d-none");
     }
 
- 
 
     document.getElementById('btn-anterior').addEventListener('click', () => {
         if (paginaActual > 1) {

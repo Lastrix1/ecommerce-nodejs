@@ -121,7 +121,9 @@ window.cambiarEstado = function(id) {
             try {
                 const respuesta = await fetch(`http://localhost:3000/api/productos/${id}`, {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json" ,
+                                "Authorization": "Bearer " + localStorage.getItem("token")
+                    },
                     body: JSON.stringify({ activo: nuevoEstado })
                 });
 
@@ -147,7 +149,8 @@ async function renderizarVentas() {
     if (!tablaVentas) return;
 
     try {
-        const respuesta = await fetch("http://localhost:3000/api/ventas");
+        const respuesta = await fetch("http://localhost:3000/api/ventas",{headers:{"Authorization": "Bearer " + localStorage.getItem("token")}});
+        
         if (!respuesta.ok) throw new Error("No se pudieron obtener las ventas");
         const ventas = await respuesta.json();
 
@@ -181,7 +184,11 @@ async function renderizarVentas() {
 
 async function renderizarEstadisticas() {
     try {
-        const resVentas = await fetch("http://localhost:3000/api/ventas");
+        const resVentas = await fetch("http://localhost:3000/api/ventas", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        });
         const ventas = resVentas.ok ? await resVentas.json() : [];
         
         const productosActivos = productos.filter(p => p.activo == 1 || p.activo == true).length;

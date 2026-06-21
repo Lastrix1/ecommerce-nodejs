@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const respuesta = await fetch(url, {
                 method: metodo,
+                headers:{"Authorization": "Bearer " + localStorage.getItem("token")},
                 body: formData
             });
 

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { Usuario } = require('../models');
 
 const authController = {
@@ -114,8 +115,16 @@ const authController = {
             });
         }
 
+        // Generamos el JWT con los datos del usuario en el payload
+        const token = jwt.sign(
+            { id: usuario.id, nombre: usuario.nombre, email: usuario.email, rol: usuario.rol },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+        );
+
         return res.json({
             mensaje: '¡Ingreso exitoso!',
+            token,
             usuario: {
                 id: usuario.id,
                 nombre: usuario.nombre,

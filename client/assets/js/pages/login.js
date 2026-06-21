@@ -49,7 +49,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             localStorage.setItem(
                 "adminLogueado",
-                "true"
+                "true",
+                
+            );
+            localStorage.setItem(
+                "token",
+                data.token
             );
 
             localStorage.setItem(
@@ -73,3 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+window.accesoRapido = function() {
+    document.getElementById("email").value = "admin@admin.com";
+    document.getElementById("password").value = "admin123";
+};

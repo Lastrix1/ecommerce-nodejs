@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("usuarioId", data.usuario.id);
             localStorage.setItem("cliente", data.usuario.nombre);
             localStorage.setItem("usuarioLogueado", "true");
+            localStorage.setItem("token", data.token);
 
             window.location.href = "./productos.html";
 
