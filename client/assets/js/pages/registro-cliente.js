@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const respuesta = await fetch(
-                "http://localhost:3000/api/auth/registro",
+                "https://ecommerce-nodejs-production-9536.up.railway.app/api/auth/registro",
                 {
                     method: "POST",
                     headers: {

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const productoId = urlParams.get("id"); 
 
     if (productoId && productoId !== "null" && productoId !== "undefined") {
-        fetch(`http://localhost:3000/api/productos/${productoId}`)
+        fetch(`https://ecommerce-nodejs-production-9536.up.railway.app/api/productos/${productoId}`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error(`El producto con ID ${productoId} no existe.`);
@@ -47,11 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            let url = "http://localhost:3000/api/productos";
+            let url = "https://ecommerce-nodejs-production-9536.up.railway.app/api/productos";
             let metodo = "POST"; 
 
             if (productoId && productoId !== "null" && productoId !== "undefined") {
-                url = `http://localhost:3000/api/productos/${productoId}`;
+                url = `https://ecommerce-nodejs-production-9536.up.railway.app/api/productos/${productoId}`;
                 metodo = "PUT"; 
             }
 

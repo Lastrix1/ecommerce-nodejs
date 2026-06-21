@@ -53,7 +53,7 @@ let totalItemsEnBaseDeDatos = 0;
 
 async function cargarProductosDesdeAPI(pagina = 1, categoria = "Todos") {
     try {
-        const respuesta = await fetch(`http://localhost:3000/api/productos`);
+        const respuesta = await fetch(`https://ecommerce-nodejs-production-9536.up.railway.app/api/productos`);
         const respuestaJson = await respuesta.json();
 
         console.log("Respuesta API productos:", respuestaJson);
@@ -68,7 +68,7 @@ async function cargarProductosDesdeAPI(pagina = 1, categoria = "Todos") {
                 ...p,
                 imagen: nombreImagen.startsWith('http') 
                     ? nombreImagen 
-                    : `http://localhost:3000/assets/img/${nombreImagen}`
+                    : `https://ecommerce-nodejs-production-9536.up.railway.app/assets/img/${nombreImagen}`
             };
         });
 
@@ -152,7 +152,7 @@ window.renderizarTienda = function (categoria = "Todos") {
                          alt="${p.nombre}" 
                          class="img-fluid rounded-3" 
                          style="max-height: 100%; object-fit: contain;"
-                         onerror="this.src='http://localhost:3000/assets/img/favicon.png'">
+                         onerror="this.src='https://ecommerce-nodejs-production-9536.up.railway.app/assets/img/favicon.png'">
                 </div>
                 <div class="card-body d-flex flex-column text-center pt-2">
                     <span class="badge bg-secondary-subtle text-secondary-emphasis align-self-center mb-2 px-3 rounded-pill small">${p.categoria}</span>

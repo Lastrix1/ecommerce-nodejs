@@ -83,7 +83,7 @@ async function generarPDF() {
         
         const esOscuro = document.documentElement.getAttribute('data-bs-theme') === 'dark';
 
-        const logoUrl = 'http://localhost:3000/assets/img/favicon.png';
+        const logoUrl = 'https://ecommerce-nodejs-production-9536.up.railway.app/assets/img/favicon.png';
         const logoBytes = await fetch(logoUrl).then(res => res.arrayBuffer());
         const logoImage = await pdfDoc.embedPng(logoBytes);
         const logoDims = logoImage.scale(0.4);

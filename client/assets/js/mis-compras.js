@@ -15,7 +15,7 @@ async function cargarCompras() {
 
     try {
 
-        const respuesta = await fetch(`http://localhost:3000/api/ventas/usuario/${usuarioId}`);
+        const respuesta = await fetch(`https://ecommerce-nodejs-production-9536.up.railway.app/api/ventas/usuario/${usuarioId}`);
         const ventas = await respuesta.json();
         console.log("VENTAS RECIBIDAS:", ventas);
         renderizarCompras(ventas);

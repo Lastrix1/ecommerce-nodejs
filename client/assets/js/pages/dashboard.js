@@ -6,7 +6,7 @@ let productos = [];
 
 async function obtenerProductosDesdeAPI() {
     try {
-        const respuesta = await fetch(`http://localhost:3000/api/productos?t=${Date.now()}`);
+        const respuesta = await fetch(`https://ecommerce-nodejs-production-9536.up.railway.app/api/productos?t=${Date.now()}`);
         if (!respuesta.ok) throw new Error("Error al consultar la API");
         
         const resultado = await respuesta.json();
@@ -55,11 +55,11 @@ function renderizarProductos(filtro = "", categoria = "Todos", orden = "") {
         <tr>
             <td>${producto.id}</td>
             <td>
-                <img src="${producto.imagen && producto.imagen.startsWith('http') ? producto.imagen : 'http://localhost:3000/assets/img/' + (producto.imagen || 'favicon.png')}" 
+                <img src="${producto.imagen && producto.imagen.startsWith('http') ? producto.imagen : 'https://ecommerce-nodejs-production-9536.up.railway.app/assets/img/' + (producto.imagen || 'favicon.png')}" 
                     alt="${producto.nombre}" 
                     width="60" 
                     class="rounded shadow-sm" 
-                    onerror="this.src='http://localhost:3000/assets/img/favicon.png'">
+                    onerror="this.src='https://ecommerce-nodejs-production-9536.up.railway.app/assets/img/favicon.png'">
             </td>
             <td>${producto.nombre}</td>
             <td>${producto.categoria}</td>
@@ -119,7 +119,7 @@ window.cambiarEstado = function(id) {
     }).then(async (result) => {
         if (result.isConfirmed) {
             try {
-                const respuesta = await fetch(`http://localhost:3000/api/productos/${id}`, {
+                const respuesta = await fetch(`https://ecommerce-nodejs-production-9536.up.railway.app/api/productos/${id}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" ,
                                 "Authorization": "Bearer " + localStorage.getItem("token")
@@ -149,7 +149,7 @@ async function renderizarVentas() {
     if (!tablaVentas) return;
 
     try {
-        const respuesta = await fetch("http://localhost:3000/api/ventas",{headers:{"Authorization": "Bearer " + localStorage.getItem("token")}});
+        const respuesta = await fetch("https://ecommerce-nodejs-production-9536.up.railway.app/api/ventas",{headers:{"Authorization": "Bearer " + localStorage.getItem("token")}});
         
         if (!respuesta.ok) throw new Error("No se pudieron obtener las ventas");
         const ventas = await respuesta.json();
@@ -184,7 +184,7 @@ async function renderizarVentas() {
 
 async function renderizarEstadisticas() {
     try {
-        const resVentas = await fetch("http://localhost:3000/api/ventas", {
+        const resVentas = await fetch("https://ecommerce-nodejs-production-9536.up.railway.app/api/ventas", {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token")
             }
@@ -208,7 +208,7 @@ async function renderizarEstadisticas() {
 
 window.descargarExcelVentas = async function() {
     try {
-        const respuesta = await fetch("http://localhost:3000/api/ventas");
+        const respuesta = await fetch("https://ecommerce-nodejs-production-9536.up.railway.app/api/ventas");
         if (!respuesta.ok) throw new Error("Error al obtener los datos");
         const historial = await respuesta.json();
 
